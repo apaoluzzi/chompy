@@ -84,22 +84,19 @@ class PolytopalComplex(object):
 
 		#-- __init__ body -------------------------------------
 		
+		# TODO (alberto):  remove pyplasm and use qhull
+		###############################################
+		
 		if cells != []:
 			hpc = MKPOL([ points, [[v+1 for v in cell] for cell in cells], None])
 		else:
 			hpc = JOIN(AA(MK)(points))
-		#if __debug: VIEW(hpc)
 		self.dim = DIM(hpc)
 		self.rn = RN(hpc)
-		#self.vertices = PointSet(points)
 		
 		self.cells = (self.dim + 1)*[[]]
-		#self.n = len(self.vertices.dict)
 		d = self.dim		
-		#skel = UKPOL(SKELETON(d)(hpc))
 		
-		#assert len(CAT(skel[1])) == len(CAT(cells))
-
 		self.vertices = PointSet(UKPOL(SKELETON(d)(hpc))[0])
 		self.n = len(self.vertices.dict)
 		
@@ -114,6 +111,8 @@ class PolytopalComplex(object):
 				for i in range(self.dim + 1) ]
 		
 		self.homology = homology_maps(self.dictos)
+		self.properties = {}
+		self.properties["boundary"] = []
 
 	def chain_complex (self):
 		""" To compute d adjacency matrices that implement the boundary maps.
@@ -332,11 +331,11 @@ class PolytopalComplex(object):
 
 		boundary_indices = [i for i in range(A.shape[0]) if A[i].sum() == 1]
 
- 		# make boundary orientation coherent  --------------------------
+		# make boundary orientation coherent  --------------------------
 		boundary_pairs = [(i,j) for (i,j) in a if (j in boundary_indices)] 
- 		facetsdict = dict([[v,k] for k,v in dictos[d-1].items()])
- 		cellsdict = dict([[v,k] for k,v in dictos[d].items()])
- 		pairs = [(cellsdict[c], facetsdict[f]) for c,f in boundary_pairs]
+		facetsdict = dict([[v,k] for k,v in dictos[d-1].items()])
+		cellsdict = dict([[v,k] for k,v in dictos[d].items()])
+		pairs = [(cellsdict[c], facetsdict[f]) for c,f in boundary_pairs]
 		
 		def getPointUnderFace(pair):
 			cell,face = AA(eval)(pair)
@@ -358,13 +357,13 @@ class PolytopalComplex(object):
 						for k,transform in enumerate(transforms_3d_2d)]
 		faceVectors2d = [AA(RTAIL)(vect3d) for vect3d in faceVectors3d]
 		
- 		def simplex(cell):
- 			out = [point+[1.0] for point in cell]
- 			return out
- 		
- 		def volume(cell):
- 			return linalg.det(mat(simplex(cell)))
- 			
+		def simplex(cell):
+			out = [point+[1.0] for point in cell]
+			return out
+		
+		def volume(cell):
+			return linalg.det(mat(simplex(cell)))
+			
 		faces = []
 		for k,face in enumerate(facePoints):
 			vol = volume(face[:-1]+[belowPoints[k]])
@@ -372,96 +371,96 @@ class PolytopalComplex(object):
 			if vol>0:  faces += [[ verts[0], verts[1], verts[3], verts[2] ]]
 			else:  faces += [[ verts[2], verts[3], verts[1], verts[0] ]]
 
-# 		inv_dict = dict([[v,k] for k,v in dictos[d-1].items()])
-# 		faces = [eval(inv_dict[k]) for k in boundary_indices]
+#		inv_dict = dict([[v,k] for k,v in dictos[d-1].items()])
+#		faces = [eval(inv_dict[k]) for k in boundary_indices]
 		return PolytopalComplex(vertices, faces)
 
 
-# 	## -- boundary Method -------------------------------
-# 	def boundary (self):
-# 		""" To compute the boundary of a simplicial d-complex.
+#	## -- boundary Method -------------------------------
+#	def boundary (self):
+#		""" To compute the boundary of a simplicial d-complex.
 # 
-# 		Return the closed (d-1)-complex triangulating the boundary of the input complex.
-# 		"""
-# 		obj = self.copy()
-# 		cells = obj.cells
-# 		vertices = obj.vertices.points
-# 		d = obj.dim
-# 		dictos = obj.dictos
-# 		h = obj.homology
-# 		a = array(h[d])
+#		Return the closed (d-1)-complex triangulating the boundary of the input complex.
+#		"""
+#		obj = self.copy()
+#		cells = obj.cells
+#		vertices = obj.vertices.points
+#		d = obj.dim
+#		dictos = obj.dictos
+#		h = obj.homology
+#		a = array(h[d])
 # 
-# 		V = array( len(a)*[1] )
-# 		J = a[:,0]
-# 		I = a[:,1]
+#		V = array( len(a)*[1] )
+#		J = a[:,0]
+#		I = a[:,1]
 # 
-# 		A = sparse.coo_matrix((V,(I,J)), shape=(max(I)+1, max(J)+1)).tocsr()
+#		A = sparse.coo_matrix((V,(I,J)), shape=(max(I)+1, max(J)+1)).tocsr()
 # 
-# 		# make boundary orientation coherent  --------------------------
+#		# make boundary orientation coherent  --------------------------
 # 
-# 		def simplex(cell):
-# 			point = self.vertices.ind
-# 			return [eval(point[k])+[1.0] for k in cell]
-# 		
-# 		def volume(cell):
-# 			return linalg.det(mat(simplex(cell)))
+#		def simplex(cell):
+#			point = self.vertices.ind
+#			return [eval(point[k])+[1.0] for k in cell]
+#		
+#		def volume(cell):
+#			return linalg.det(mat(simplex(cell)))
 # 
-# 		def orientation():
-# 			if d == self.rn:   # solid complex
-# 				out = [volume(cell) for cell in cells[-1]]
-# 			else:				# embedded complex
-# 				out = [linalg.det(linalg.qr(mat(simplex(cell)))[1][:,:-1])
-# 					   for cell in cells[-1]]  # DEBUG (choose minor with det(minor != 0	))
-# 			return out		
+#		def orientation():
+#			if d == self.rn:   # solid complex
+#				out = [volume(cell) for cell in cells[-1]]
+#			else:				# embedded complex
+#				out = [linalg.det(linalg.qr(mat(simplex(cell)))[1][:,:-1])
+#					   for cell in cells[-1]]  # DEBUG (choose minor with det(minor != 0	))
+#			return out		
 # 
-# 		
-# 		boundary_indices = [i for i in range(A.shape[0]) if A[i].sum() == 1 ] 
-# 			
-# 		boundary_signs = orientation()   
+#		
+#		boundary_indices = [i for i in range(A.shape[0]) if A[i].sum() == 1 ] 
+#			
+#		boundary_signs = orientation()	 
 # 
-# 		boundary_pairs = [(i,j) for (i,j) in a 
-# 			if (j in boundary_indices)] 
-# 
-# 
-# 		facetsdict = dict([[v,k] for k,v in dictos[d-1].items()])
-# 		cellsdict = dict([[v,k] for k,v in dictos[d].items()])
-# 						
-# 		def invertOrientation(facet):
-# 			facet[0],facet[-1] = facet[-1],facet[0]
-# 			return facet
+#		boundary_pairs = [(i,j) for (i,j) in a 
+#			if (j in boundary_indices)] 
 # 
 # 
-# 		facets = [eval(facetsdict[k]) for k in boundary_indices]
-#  		facets = [invertOrientation(eval(facetsdict[facet]))  
-#  					if boundary_signs[face]<0 else eval(facetsdict[facet])
-#  					for face,facet in boundary_pairs]
-# 				
-# 		# remapping section -----------------------------------------------
-# 		
-# 		if facets != []:
-# 			oldinds = list(set(CAT(facets)))
-# 			newverts = PointSet([eval(obj.vertices.ind[k]) for k in oldinds])
-# 			newfacets = [[ newverts.dict[obj.vertices.ind[k]] 
-# 							for k in facet] for facet in facets]
-# 			return SimplicialComplex(newverts.points, newfacets)
-# 		else: return SimplicialComplex([], [])
+#		facetsdict = dict([[v,k] for k,v in dictos[d-1].items()])
+#		cellsdict = dict([[v,k] for k,v in dictos[d].items()])
+#						
+#		def invertOrientation(facet):
+#			facet[0],facet[-1] = facet[-1],facet[0]
+#			return facet
+# 
+# 
+#		facets = [eval(facetsdict[k]) for k in boundary_indices]
+#		facets = [invertOrientation(eval(facetsdict[facet]))  
+#					if boundary_signs[face]<0 else eval(facetsdict[facet])
+#					for face,facet in boundary_pairs]
+#				
+#		# remapping section -----------------------------------------------
+#		
+#		if facets != []:
+#			oldinds = list(set(CAT(facets)))
+#			newverts = PointSet([eval(obj.vertices.ind[k]) for k in oldinds])
+#			newfacets = [[ newverts.dict[obj.vertices.ind[k]] 
+#							for k in facet] for facet in facets]
+#			return SimplicialComplex(newverts.points, newfacets)
+#		else: return SimplicialComplex([], [])
 
 
 def complexProd(args):
-    pol1,pol2 = args
-    p1, p2 = pol1.vertices.points, pol2.vertices.points
-    m1, m2 = len(p1), len(p2)
-    points = [ p1[i]+p2[j] for i in range(m1)
-              for j in range(m2) ]
+	pol1,pol2 = args
+	p1, p2 = pol1.vertices.points, pol2.vertices.points
+	m1, m2 = len(p1), len(p2)
+	points = [ p1[i]+p2[j] for i in range(m1)
+			  for j in range(m2) ]
 
-    def ind(args):
-        i,j = args
-        return i*m2 + j
+	def ind(args):
+		i,j = args
+		return i*m2 + j
 
-    c1, c2 = pol1.cells[-1], pol2.cells[-1]
-    n1, n2 = len(c1), len(c2)
-    cells = [ AA(ind)(CART([c1[i],c2[j]])) for i in range(n1)
-              for j in range(n2) ]
+	c1, c2 = pol1.cells[-1], pol2.cells[-1]
+	n1, n2 = len(c1), len(c2)
+	cells = [ AA(ind)(CART([c1[i],c2[j]])) for i in range(n1)
+			  for j in range(n2) ]
 
-    return PolytopalComplex(points,cells)
+	return PolytopalComplex(points,cells)
 
