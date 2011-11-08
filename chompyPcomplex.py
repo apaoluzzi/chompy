@@ -337,7 +337,6 @@ class PolytopalComplex(object):
  		facetsdict = dict([[v,k] for k,v in dictos[d-1].items()])
  		cellsdict = dict([[v,k] for k,v in dictos[d].items()])
  		pairs = [(cellsdict[c], facetsdict[f]) for c,f in boundary_pairs]
-		myprint("pairs",pairs)
 		
 		def getPointUnderFace(pair):
 			cell,face = AA(eval)(pair)
@@ -348,26 +347,19 @@ class PolytopalComplex(object):
 			return [belowPoint,faceBarycenter,facePoints]
 
 		triples = [getPointUnderFace(pair) for pair in pairs]
-		myprint("triples",triples)
 		belowPoints,faceBarycenters,facePoints = TRANS(triples)
-		myprint("belowPoints,faceBarycenters,facePoints",(belowPoints,faceBarycenters,facePoints))
 		faceVectors = [[list(point - triple[1]) for point in AA(array)(triple[2])] 
 					for triple in triples]
-		myprint("faceVectors",faceVectors)
 		transforms_3d_2d = AA(mat)(
 			[vect3d[0:2] + [list(array(belowPoints[k])-faceBarycenters[k])] 
 					for k,vect3d in enumerate(faceVectors)])
 		transforms_3d_2d = [transform.I for transform in transforms_3d_2d]
-		myprint("transforms_3d_2d",transforms_3d_2d)
 		faceVectors3d = [(faceVectors[k] * transform).tolist()
 						for k,transform in enumerate(transforms_3d_2d)]
-		myprint("faceVectors3d",faceVectors3d)
 		faceVectors2d = [AA(RTAIL)(vect3d) for vect3d in faceVectors3d]
-		myprint("faceVectors2d",faceVectors2d)
 		
  		def simplex(cell):
  			out = [point+[1.0] for point in cell]
- 			myprint("out",out)
  			return out
  		
  		def volume(cell):
@@ -376,11 +368,9 @@ class PolytopalComplex(object):
 		faces = []
 		for k,face in enumerate(facePoints):
 			vol = volume(face[:-1]+[belowPoints[k]])
-			myprint("vol",vol)
 			verts = eval(pairs[k][1])
 			if vol>0:  faces += [[ verts[0], verts[1], verts[3], verts[2] ]]
 			else:  faces += [[ verts[2], verts[3], verts[1], verts[0] ]]
-		myprint("faces",faces)
 
 # 		inv_dict = dict([[v,k] for k,v in dictos[d-1].items()])
 # 		faces = [eval(inv_dict[k]) for k in boundary_indices]
