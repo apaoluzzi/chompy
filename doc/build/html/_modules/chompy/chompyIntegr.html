@@ -1,0 +1,299 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>chompy.chompyIntegr &mdash; Chompy 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Chompy 0.1 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">Chompy 0.1 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for chompy.chompyIntegr</h1><div class="highlight"><pre>
+<span class="c"># -*- coding: utf-8 -*-</span>
+
+<span class="c">## This program provides a prototype library for simplicial complexes.</span>
+<span class="c">## Includes input, output, skeleton and boundary evaluation, linear</span>
+<span class="c">## extrusion, boundary and coboundary operators, and linear combination</span>
+<span class="c">## of chains.</span>
+<span class="c">## Author: Alberto Paoluzzi (paoluzzi@dia.uniroma3.it)</span>
+<span class="c">## Copyright (C) 2009 Dipartimento Informatica e Automazione,</span>
+<span class="c">## Università Roma Tre, Rome, Italy.</span>
+
+<span class="c">## This library is free software; you can redistribute it and/or</span>
+<span class="c">## modify it under the terms of the GNU Lesser General Public</span>
+<span class="c">## License as published by the Free Software Foundation; either</span>
+<span class="c">## version 2.1 of the License, or (at your option) any later version.</span>
+
+<span class="c">## This library is distributed in the hope that it will be useful,</span>
+<span class="c">## but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c">## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU</span>
+<span class="c">## Lesser General Public License for more details.</span>
+
+<span class="c">## You should have received a copy of the GNU Lesser General Public</span>
+<span class="c">## License along with this library; if not, write to the Free Software</span>
+<span class="c">## Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Module for boundary integration of polynomials over three-dimensional</span>
+<span class="sd">simplicial domains.</span>
+
+<span class="sd">Look for method documentation in:</span>
+<span class="sd">C, Cattani and A. Paoluzzi: Boundary integration over linear polyhedra.</span>
+<span class="sd">Computer-Aided Design 22(2): 130-135 (1990) (doi:10.1016/0010-4485(90)90007-Y</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="o">*</span>
+
+
+<span class="c">## --------------------------------------------------</span>
+<span class="c">## --Utility functions-------------------------------</span>
+<span class="c">## --------------------------------------------------</span>
+
+<span class="k">def</span> <span class="nf">__evalprint__</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
+    <span class="k">print</span> <span class="n">string</span> <span class="o">+</span> <span class="s">&quot; =&gt; &quot;</span><span class="p">,</span> <span class="nb">eval</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="choose"><a class="viewcode-back" href="../../chompy.html#chompy.chompyIntegr.choose">[docs]</a><span class="k">def</span> <span class="nf">choose</span> <span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">k</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; To compute a binomial number.</span>
+<span class="sd">    Efficient linear recursion implemented.</span>
+<span class="sd">    </span>
+<span class="sd">    Return an integer number.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">n</span> <span class="o">==</span> <span class="n">k</span><span class="p">:</span> <span class="k">return</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span> <span class="k">return</span> <span class="n">choose</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">n</span><span class="o">/</span><span class="n">k</span>
+</div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">## -- choose function (Pascal&#39; row) ------------------------&quot;</span>
+    <span class="n">__evalprint__</span><span class="p">(</span><span class="s">&quot;&quot;&quot; choose(4,0) &quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="n">__evalprint__</span><span class="p">(</span><span class="s">&quot;&quot;&quot; choose(4,1) &quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="n">__evalprint__</span><span class="p">(</span><span class="s">&quot;&quot;&quot; choose(4,2) &quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="n">__evalprint__</span><span class="p">(</span><span class="s">&quot;&quot;&quot; choose(4,3) &quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="n">__evalprint__</span><span class="p">(</span><span class="s">&quot;&quot;&quot; choose(4,4) &quot;&quot;&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="times"><a class="viewcode-back" href="../../chompy.html#chompy.chompyIntegr.times">[docs]</a><span class="k">def</span> <span class="nf">times</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">b</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">b</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">c</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">c</span>
+
+</div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">## -- vector product (three-dimensional) ------------------&quot;</span>
+    <span class="n">__evalprint__</span><span class="p">(</span><span class="s">&quot;&quot;&quot; times([1,0,0], [0,1,0]) &quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="n">__evalprint__</span><span class="p">(</span><span class="s">&quot;&quot;&quot; times([0,1,1], [1,0,0]) &quot;&quot;&quot;</span><span class="p">)</span>
+
+
+<span class="c">## --------------------------------------------------</span>
+<span class="c">## --Format conversion-------------------------------</span>
+<span class="c">## --------------------------------------------------</span>
+
+<div class="viewcode-block" id="complex2surface"><a class="viewcode-back" href="../../chompy.html#chompy.chompyIntegr.complex2surface">[docs]</a><span class="k">def</span> <span class="nf">complex2surface</span> <span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Transforms the 2-skeleton of a simplicial complex in a triangulated surface.</span>
+
+<span class="sd">    Return a list of triples of surface vertices (nD points).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cells</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">cells</span>
+    <span class="n">verts</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">points</span>
+    <span class="n">surface</span> <span class="o">=</span> <span class="p">[[</span><span class="n">verts</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">verts</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">verts</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="k">for</span> <span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">]</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">cells</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span>
+    <span class="k">return</span> <span class="n">surface</span>
+
+<span class="c">##if __name__ == &quot;__main__&quot;:</span>
+<span class="c">##    print &quot;\n## -- Format conversion (complex -&gt; surface) --------------&quot;</span>
+<span class="c">##    __evalprint__(&quot;&quot;&quot; grid([ 2*[1.0], 1*[1.0] ]) &quot;&quot;&quot;)</span>
+<span class="c">##    __evalprint__(&quot;&quot;&quot; complex2surface(grid([ 2*[1.0], 1*[1.0] ])) &quot;&quot;&quot;)</span>
+
+
+
+<span class="c">## --------------------------------------------------</span>
+<span class="c">## --Integration utilities---------------------------</span>
+<span class="c">## --------------------------------------------------</span>
+
+</div>
+<div class="viewcode-block" id="M"><a class="viewcode-back" href="../../chompy.html#chompy.chompyIntegr.M">[docs]</a><span class="k">def</span> <span class="nf">M</span> <span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">):</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">alpha</span><span class="o">+</span><span class="mi">2</span><span class="p">):</span>
+        <span class="n">a</span> <span class="o">+=</span> <span class="n">choose</span><span class="p">(</span><span class="n">alpha</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">h</span><span class="p">)</span> <span class="o">*</span> <span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="n">h</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">h</span><span class="o">+</span><span class="n">beta</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">/</span> <span class="p">(</span><span class="n">alpha</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+</div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">## -- Integration utilities (2D) --------------&quot;</span>   
+    <span class="n">__evalprint__</span><span class="p">(</span><span class="s">&quot;&quot;&quot; M(0,0) &quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="n">__evalprint__</span><span class="p">(</span><span class="s">&quot;&quot;&quot; M(1,0) &quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="n">__evalprint__</span><span class="p">(</span><span class="s">&quot;&quot;&quot; M(0,1) &quot;&quot;&quot;</span><span class="p">)</span>
+
+
+
+
+<div class="viewcode-block" id="T3"><a class="viewcode-back" href="../../chompy.html#chompy.chompyIntegr.T3">[docs]</a><span class="k">def</span> <span class="nf">T3</span> <span class="p">(</span><span class="n">triangle</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span><span class="n">beta</span><span class="p">,</span><span class="n">gamma</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">magnitude</span><span class="p">(</span><span class="n">vect</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">vect</span><span class="p">))</span>
+    
+    <span class="n">t</span> <span class="o">=</span> <span class="n">mat</span><span class="p">(</span><span class="n">triangle</span><span class="p">)</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">b</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">b</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+    <span class="n">s1</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">triangle</span>
+    <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">alpha</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">beta</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">gamma</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">s2</span> <span class="o">=</span> <span class="mf">0.0</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">h</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+                    <span class="n">s3</span> <span class="o">=</span> <span class="mf">0.0</span>
+                    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+                        <span class="n">s4</span> <span class="o">=</span> <span class="mf">0.0</span>
+                        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+                            <span class="n">s4</span> <span class="o">+=</span> <span class="n">choose</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">l</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">**</span><span class="p">(</span><span class="n">m</span><span class="o">-</span><span class="n">l</span><span class="p">)</span> <span class="o">*</span> <span class="n">b</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">**</span><span class="n">l</span> <span class="o">*</span> <span class="n">M</span><span class="p">(</span><span class="n">h</span><span class="o">+</span><span class="n">k</span><span class="o">+</span><span class="n">m</span><span class="o">-</span><span class="n">i</span><span class="o">-</span><span class="n">j</span><span class="o">-</span><span class="n">l</span><span class="p">,</span><span class="n">i</span><span class="o">+</span><span class="n">j</span><span class="o">+</span><span class="n">l</span><span class="p">)</span>
+                        <span class="n">s3</span> <span class="o">+=</span> <span class="n">choose</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">j</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="n">j</span><span class="p">)</span> <span class="o">*</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="n">j</span> <span class="o">*</span> <span class="n">s4</span>
+                    <span class="n">s2</span> <span class="o">+=</span> <span class="n">choose</span><span class="p">(</span><span class="n">h</span><span class="p">,</span><span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="p">(</span><span class="n">h</span><span class="o">-</span><span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="n">i</span> <span class="o">*</span> <span class="n">s3</span>
+                <span class="n">s1</span> <span class="o">+=</span> <span class="n">choose</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span><span class="n">h</span><span class="p">)</span> <span class="o">*</span> <span class="n">choose</span><span class="p">(</span><span class="n">beta</span><span class="p">,</span><span class="n">k</span><span class="p">)</span> <span class="o">*</span> <span class="n">choose</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span><span class="n">m</span><span class="p">)</span> \
+                      <span class="o">*</span> <span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="p">(</span><span class="n">alpha</span><span class="o">-</span><span class="n">h</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="p">(</span><span class="n">beta</span><span class="o">-</span><span class="n">k</span><span class="p">))</span> \
+                      <span class="o">*</span> <span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="o">**</span><span class="p">(</span><span class="n">gamma</span><span class="o">-</span><span class="n">m</span><span class="p">))</span> <span class="o">*</span> <span class="n">s2</span>
+    <span class="k">return</span> <span class="n">s1</span> <span class="o">*</span> <span class="n">magnitude</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+
+
+<span class="c">## --------------------------------------------------</span>
+<span class="c">## --Surface integrals-------------------------------</span>
+<span class="c">## --------------------------------------------------</span>
+
+</div>
+<div class="viewcode-block" id="II"><a class="viewcode-back" href="../../chompy.html#chompy.chompyIntegr.II">[docs]</a><span class="k">def</span> <span class="nf">II</span><span class="p">(</span><span class="n">surface</span><span class="p">,</span><span class="n">alpha</span><span class="p">,</span><span class="n">beta</span><span class="p">,</span><span class="n">gamma</span><span class="p">):</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">triangle</span> <span class="ow">in</span> <span class="n">surface</span><span class="p">:</span>
+        <span class="n">w</span> <span class="o">+=</span> <span class="n">T3</span><span class="p">(</span><span class="n">triangle</span><span class="p">,</span><span class="n">alpha</span><span class="p">,</span><span class="n">beta</span><span class="p">,</span><span class="n">gamma</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">w</span>
+</div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">## -- Surface integral --------------&quot;</span>
+    <span class="n">__evalprint__</span><span class="p">(</span><span class="s">&quot;&quot;&quot; II([[[0,0,0],[10,0,0],[0,10,0]], </span>
+<span class="s">[[10,0,0],[10,10,0],[0,10,0]]], 0,0,0) &quot;&quot;&quot;</span><span class="p">)</span>
+
+
+<span class="c">## --------------------------------------------------</span>
+<span class="c">## --Volume integrals--------------------------------</span>
+<span class="c">## --------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="III"><a class="viewcode-back" href="../../chompy.html#chompy.chompyIntegr.III">[docs]</a><span class="k">def</span> <span class="nf">III</span><span class="p">(</span><span class="n">surface</span><span class="p">,</span><span class="n">alpha</span><span class="p">,</span><span class="n">beta</span><span class="p">,</span><span class="n">gamma</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">magnitude</span><span class="p">(</span><span class="n">vect</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">vect</span><span class="p">))</span>
+
+    <span class="n">w</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">triangle</span> <span class="ow">in</span> <span class="n">surface</span><span class="p">:</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">mat</span><span class="p">(</span><span class="n">triangle</span><span class="p">)</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">b</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">b</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">w</span> <span class="o">+=</span> <span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">magnitude</span><span class="p">(</span><span class="n">c</span><span class="p">))</span> <span class="o">*</span> <span class="n">T3</span><span class="p">(</span><span class="n">triangle</span><span class="p">,</span><span class="n">alpha</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">beta</span><span class="p">,</span><span class="n">gamma</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">w</span><span class="o">/</span><span class="p">(</span><span class="n">alpha</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+</div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">## -- Surface integral --------------&quot;</span>
+    <span class="n">__evalprint__</span><span class="p">(</span><span class="s">&quot;&quot;&quot; II([[[0,0,0],[10,0,0],[0,10,0]], </span>
+<span class="s">[[10,0,0],[10,10,0],[0,10,0]]], 0,0,0) &quot;&quot;&quot;</span><span class="p">)</span>
+    
+    <span class="n">__evalprint__</span><span class="p">(</span><span class="s">&quot;&quot;&quot; II([[[0,0,0],[10,0,0],[0,10,0]], </span>
+<span class="s">[[10,0,0],[10,10,0],[0,10,0]]], 1,0,0) &quot;&quot;&quot;</span><span class="p">)</span>
+
+    <span class="n">__evalprint__</span><span class="p">(</span><span class="s">&quot;&quot;&quot; II([[[0.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]],</span>
+<span class="s">[[1.0, 1.0, 0.0], [0.0, 0.0, 0.0], [1.0, 1.0, 1.0]], [[0.0, 1.0, 1.0],</span>
+<span class="s">[1.0, 0.0, 1.0], [0.0, 0.0, 1.0]], [[0.0, 0.0, 0.0], [1.0, 1.0, 0.0],</span>
+<span class="s">[0.0, 0.0, 1.0]], [[1.0, 1.0, 1.0], [1.0, 0.0, 0.0], [1.0, 1.0, 0.0]],</span>
+<span class="s">[[0.0, 0.0, 0.0], [1.0, 0.0, 0.0], [0.0, 1.0, 0.0]], [[1.0, 1.0, 1.0],</span>
+<span class="s">[0.0, 0.0, 0.0], [1.0, 0.0, 0.0]], [[0.0, 1.0, 1.0], [0.0, 0.0, 1.0],</span>
+<span class="s">[0.0, 1.0, 0.0]], [[0.0, 1.0, 0.0], [1.0, 0.0, 1.0], [0.0, 1.0, 1.0]],</span>
+<span class="s">[[1.0, 0.0, 1.0], [0.0, 0.0, 1.0], [1.0, 1.0, 0.0]], [[1.0, 0.0, 1.0],</span>
+<span class="s">[0.0, 1.0, 0.0], [1.0, 0.0, 0.0]], [[1.0, 0.0, 1.0], [1.0, 1.0, 0.0],</span>
+<span class="s">[1.0, 0.0, 0.0]]], 0,0,0) &quot;&quot;&quot;</span><span class="p">)</span>
+
+
+<span class="c">## --------------------------------------------------</span>
+<span class="c">## --Main of module----------------------------------</span>
+<span class="c">## --------------------------------------------------</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">Chompy 0.1 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, DIA -- Roma Tre University.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.
+    </div>
+  </body>
+</html>

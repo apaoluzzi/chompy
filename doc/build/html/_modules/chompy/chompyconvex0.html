@@ -1,0 +1,328 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>chompy.chompyconvex0 &mdash; Chompy 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Chompy 0.1 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">Chompy 0.1 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for chompy.chompyconvex0</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">chompy</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">dot</span>
+
+<span class="n">__debug</span> <span class="o">=</span> <span class="bp">False</span>
+
+<span class="n">ROUND_ZERO</span> <span class="o">=</span> <span class="mf">1E-07</span>
+
+<div class="viewcode-block" id="round_or_zero"><a class="viewcode-back" href="../../chompy.html#chompy.chompyconvex0.round_or_zero">[docs]</a><span class="k">def</span> <span class="nf">round_or_zero</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">prec</span><span class="o">=</span><span class="mi">7</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Decision procedure to approximate a small number to zero.</span>
+
+<span class="sd">    Return either the input number or zero.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">myround</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">eval</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%.5f</span><span class="s">&#39;</span> <span class="o">%</span> <span class="nb">round</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">prec</span><span class="p">))</span>
+    <span class="n">xx</span> <span class="o">=</span> <span class="n">myround</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">xx</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">ROUND_ZERO</span><span class="p">:</span> <span class="k">return</span> <span class="mf">0.0</span>
+    <span class="k">else</span><span class="p">:</span> <span class="k">return</span> <span class="n">xx</span>
+</div>
+<div class="viewcode-block" id="evalprint__"><a class="viewcode-back" href="../../chompy.html#chompy.chompyconvex0.evalprint__">[docs]</a><span class="k">def</span> <span class="nf">evalprint__</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Simple tool to evaluate a language expression passed as a string.</span>
+
+<span class="sd">    Side effect: print the string and its value.</span>
+<span class="sd">    Return ``None``. </span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">+</span> <span class="n">string</span> <span class="o">+</span> <span class="s">&quot; =&gt; &quot;</span><span class="p">,</span> <span class="nb">eval</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="fixedPrec"><a class="viewcode-back" href="../../chompy.html#chompy.chompyconvex0.fixedPrec">[docs]</a><span class="k">def</span> <span class="nf">fixedPrec</span> <span class="p">(</span><span class="n">num</span><span class="p">):</span>
+    <span class="n">ret</span> <span class="o">=</span> <span class="n">round_or_zero</span><span class="p">(</span><span class="n">num</span><span class="p">,</span><span class="mi">7</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">eval</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">ret</span><span class="p">))</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="nb">str</span><span class="p">(</span><span class="n">ret</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s">&#39;-&#39;</span><span class="p">:</span> <span class="k">return</span> <span class="mf">0.0</span>
+    <span class="k">else</span><span class="p">:</span> <span class="k">return</span> <span class="n">ret</span>
+</div>
+<div class="viewcode-block" id="prepKey"><a class="viewcode-back" href="../../chompy.html#chompy.chompyconvex0.prepKey">[docs]</a><span class="k">def</span> <span class="nf">prepKey</span> <span class="p">(</span><span class="n">args</span><span class="p">):</span> <span class="k">return</span> <span class="s">&quot;[&quot;</span><span class="o">+</span><span class="s">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">)</span><span class="o">+</span><span class="s">&quot;]&quot;</span></div>
+<div class="viewcode-block" id="code"><a class="viewcode-back" href="../../chompy.html#chompy.chompyconvex0.code">[docs]</a><span class="k">def</span> <span class="nf">code</span> <span class="p">(</span><span class="n">covect</span><span class="p">):</span> <span class="k">return</span> <span class="n">prepKey</span><span class="p">(</span><span class="n">AA</span><span class="p">(</span><span class="n">COMP</span><span class="p">([</span><span class="nb">str</span><span class="p">,</span><span class="n">fixedPrec</span><span class="p">]))(</span><span class="n">covect</span><span class="p">))</span>
+
+<span class="c">#########################################################</span></div>
+<div class="viewcode-block" id="PointSet"><a class="viewcode-back" href="../../chompy.html#chompy.chompyconvex0.PointSet">[docs]</a><span class="k">class</span> <span class="nc">PointSet</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="c">#########################################################</span>
+    <span class="sd">&quot;&quot;&quot; The data type to represent a set of points,</span>
+<span class="sd">        supporting a cell complex. &quot;&quot;&quot;</span>
+
+
+    <span class="c">## -- __init__ Method -------------------------------</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">):</span>
+                            
+        <span class="bp">self</span><span class="o">.</span><span class="n">dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="n">points</span> <span class="o">=</span> <span class="p">[</span> <span class="n">AA</span><span class="p">(</span><span class="nb">float</span><span class="p">)(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">points</span> <span class="p">]</span>
+        <span class="n">points</span> <span class="o">=</span> <span class="p">[</span><span class="n">AA</span><span class="p">(</span><span class="n">round_or_zero</span><span class="p">)(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">points</span><span class="p">]</span>
+        <span class="k">print</span> <span class="n">points</span>
+        <span class="n">points</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">points</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">code</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict</span><span class="p">:</span>
+                <span class="n">k</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">operator</span><span class="o">.</span><span class="n">setitem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dict</span><span class="p">,</span><span class="n">code</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">k</span><span class="p">)</span>
+                
+        <span class="bp">self</span><span class="o">.</span><span class="n">ind</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">([[</span><span class="n">v</span><span class="p">,</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict</span><span class="o">.</span><span class="n">items</span><span class="p">()])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">points</span> <span class="o">=</span> <span class="p">[</span><span class="nb">eval</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            
+
+    <span class="c">## -- __repr__ Method -------------------------------</span>
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Return a string representation of this CellComplex</span>
+<span class="sd">            in the form of a list of cells.&#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="s">&#39;Pointset: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">ind</span>
+
+    <span class="c">## -- __str__ Method -------------------------------</span>
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Return a string representation of this CellComplex</span>
+<span class="sd">            in the form of a list of cells.&#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="s">&#39;Pointset: {0} x {1}: {2}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="p">)</span>
+
+    <span class="c">## -- copy Methods -------------------------------</span>
+<div class="viewcode-block" id="PointSet.copy"><a class="viewcode-back" href="../../chompy.html#chompy.chompyconvex0.PointSet.copy">[docs]</a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; To make a copy of a PointSet object. &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="c">## -- insert Method -------------------------------</span></div>
+<div class="viewcode-block" id="PointSet.insert"><a class="viewcode-back" href="../../chompy.html#chompy.chompyconvex0.PointSet.insert">[docs]</a>    <span class="k">def</span> <span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">point</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; To add a point (if not already present) to a PointSet object. &quot;&quot;&quot;</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">code</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span> 
+            <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ind</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">key</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">points</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">points</span> <span class="o">+</span> <span class="p">[</span><span class="nb">eval</span><span class="p">(</span><span class="n">code</span><span class="p">(</span><span class="n">point</span><span class="p">))]</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="PointSet.update"><a class="viewcode-back" href="../../chompy.html#chompy.chompyconvex0.PointSet.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">modify</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; To update a PointSet object without change the element ordering. &quot;&quot;&quot;</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">([[</span><span class="n">k</span><span class="p">,</span><span class="n">modify</span><span class="p">(</span><span class="n">v</span><span class="p">)]</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ind</span><span class="o">.</span><span class="n">items</span><span class="p">()])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ind</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">([[</span><span class="n">v</span><span class="p">,</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ind</span><span class="o">.</span><span class="n">items</span><span class="p">()])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">points</span> <span class="o">=</span> <span class="p">[</span><span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ind</span><span class="p">[</span><span class="n">v</span><span class="p">])</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="c">## -- embed Method -------------------------------</span></div>
+<div class="viewcode-block" id="PointSet.embed"><a class="viewcode-back" href="../../chompy.html#chompy.chompyconvex0.PointSet.embed">[docs]</a>    <span class="k">def</span> <span class="nf">embed</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">modify</span><span class="p">(</span><span class="n">v</span><span class="p">):</span> <span class="k">return</span> <span class="n">code</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">+</span> <span class="n">n</span><span class="o">*</span><span class="p">[</span><span class="mf">0.0</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">modify</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">+=</span> <span class="n">n</span>
+        <span class="k">return</span> <span class="bp">self</span>
+    </div>
+<div class="viewcode-block" id="PointSet.translate"><a class="viewcode-back" href="../../chompy.html#chompy.chompyconvex0.PointSet.translate">[docs]</a>    <span class="k">def</span> <span class="nf">translate</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vect</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">modify</span><span class="p">(</span><span class="n">v</span><span class="p">):</span> <span class="k">return</span> <span class="n">code</span><span class="p">(</span><span class="n">array</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">v</span><span class="p">))</span> <span class="o">+</span> <span class="n">vect</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">modify</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+        </div>
+<div class="viewcode-block" id="PointSet.scale"><a class="viewcode-back" href="../../chompy.html#chompy.chompyconvex0.PointSet.scale">[docs]</a>    <span class="k">def</span> <span class="nf">scale</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vect</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">modify</span><span class="p">(</span><span class="n">v</span><span class="p">):</span> <span class="k">return</span> <span class="n">code</span><span class="p">(</span><span class="n">array</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">v</span><span class="p">))</span> <span class="o">*</span> <span class="n">vect</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">modify</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="PointSet.rotate"><a class="viewcode-back" href="../../chompy.html#chompy.chompyconvex0.PointSet.rotate">[docs]</a>    <span class="k">def</span> <span class="nf">rotate</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis1</span><span class="p">,</span> <span class="n">axis2</span><span class="p">,</span> <span class="n">angle</span><span class="p">):</span>
+        <span class="n">axis1</span> <span class="o">+=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="n">axis2</span> <span class="o">+=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="n">dim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim</span>
+        <span class="n">rotation</span> <span class="o">=</span> <span class="n">eye</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span><span class="n">dim</span><span class="p">)</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
+        <span class="n">rotation</span><span class="p">[</span><span class="n">axis1</span><span class="p">,</span><span class="n">axis1</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span>
+        <span class="n">rotation</span><span class="p">[</span><span class="n">axis2</span><span class="p">,</span><span class="n">axis2</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span>
+        <span class="n">rotation</span><span class="p">[</span><span class="n">axis1</span><span class="p">,</span><span class="n">axis2</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span>
+        <span class="n">rotation</span><span class="p">[</span><span class="n">axis2</span><span class="p">,</span><span class="n">axis1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">s</span>
+        <span class="k">def</span> <span class="nf">modify</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">code</span><span class="p">((</span><span class="n">mat</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">v</span><span class="p">))</span> <span class="o">*</span> <span class="n">mat</span><span class="p">(</span><span class="n">rotation</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">modify</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="PointSet.max"><a class="viewcode-back" href="../../chompy.html#chompy.chompyconvex0.PointSet.max">[docs]</a>    <span class="k">def</span> <span class="nf">max</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">map</span><span class="p">(</span><span class="nb">max</span><span class="p">,</span> <span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="PointSet.min"><a class="viewcode-back" href="../../chompy.html#chompy.chompyconvex0.PointSet.min">[docs]</a>    <span class="k">def</span> <span class="nf">min</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">map</span><span class="p">(</span><span class="nb">min</span><span class="p">,</span> <span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="PointSet.med"><a class="viewcode-back" href="../../chompy.html#chompy.chompyconvex0.PointSet.med">[docs]</a>    <span class="k">def</span> <span class="nf">med</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">Max</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">max</span><span class="p">,</span> <span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">))</span>
+        <span class="n">Min</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">min</span><span class="p">,</span> <span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">))</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">Max</span> <span class="o">+</span> <span class="n">Min</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+
+<span class="c">#--TODO---------------------------------------</span>
+<span class="c">##    def normalize (self):</span>
+<span class="c">##        Min = array(map(min, array(self.points).T))</span>
+<span class="c">##        Max = array(map(max, array(self.points).T))</span>
+<span class="c">##        translation = -Min</span>
+<span class="c">##        size = Max-Min</span>
+<span class="c">##        scaling = array([1/s if (s != 0) else 1.0 for s in size])</span>
+<span class="c">##        self = self.translate(translation.tolist())</span>
+<span class="c">##        self = self.scale(scaling.tolist())</span>
+<span class="c">##        return self</span>
+    
+</div></div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span> <span class="ow">and</span> <span class="n">__debug</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s"> --class PointSet------------------------&quot;</span>
+    <span class="n">evalprint__</span><span class="p">(</span><span class="s">&quot;&quot;&quot; PointSet([[0],[1],[0.5]]) &quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="n">evalprint__</span><span class="p">(</span><span class="s">&quot;&quot;&quot; PointSet([[0,0],[1,0],[0,1],[1,1]]) &quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="n">evalprint__</span><span class="p">(</span><span class="s">&quot;&quot;&quot; PointSet([[0,0],[1,0],[0,1],[1,1]]).insert([2,2]) &quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="n">evalprint__</span><span class="p">(</span><span class="s">&quot;&quot;&quot; PointSet([[0,0],[1,0],[0,1],[1,1]]).embed(2) &quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="n">evalprint__</span><span class="p">(</span><span class="s">&quot;&quot;&quot; PointSet([[0,0],[1,0],[0,1],[1,1]]).translate([1,1]) &quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="n">evalprint__</span><span class="p">(</span><span class="s">&quot;&quot;&quot; PointSet([[0,0],[1,0],[0,1],[1,1]]).scale([1,0.5]) &quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="n">evalprint__</span><span class="p">(</span><span class="s">&quot;&quot;&quot; PointSet([[0,0],[1,0],[0,1],[1,1]]).rotate(0,1,math.pi/3).ind&quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="n">evalprint__</span><span class="p">(</span><span class="s">&quot;&quot;&quot; PointSet([[0,0],[1,0],[0,1],[1,1]]).rotate(0,1,math.pi/4).ind&quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="n">evalprint__</span><span class="p">(</span><span class="s">&quot;&quot;&quot; PointSet([[0],[1],[0.5]]).max() &quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="n">evalprint__</span><span class="p">(</span><span class="s">&quot;&quot;&quot; PointSet([[0,0,2],[7,0,3],[0,10,0],[1,1,1]]).max() &quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="n">evalprint__</span><span class="p">(</span><span class="s">&quot;&quot;&quot; PointSet([[0,0,2],[7,0,3],[0,10,0],[1,1,1]]).min() &quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="n">evalprint__</span><span class="p">(</span><span class="s">&quot;&quot;&quot; PointSet([[0,0,2],[7,0,3],[0,10,0],[1,1,1]]).med() &quot;&quot;&quot;</span><span class="p">)</span>
+<span class="c">##    evalprint__(&quot;&quot;&quot; PointSet([[0,0,-2],[-7,0,3],[0,10,0],[1,1,1]]).normalize() &quot;&quot;&quot;)</span>
+
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span> <span class="ow">and</span> <span class="n">__debug</span><span class="p">:</span>
+    <span class="n">covectors</span> <span class="o">=</span> <span class="n">S1</span><span class="p">(</span><span class="n">UKPOLF</span><span class="p">(</span><span class="n">PROD</span><span class="p">([</span><span class="n">QUOTE</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]),</span><span class="n">QUOTE</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])])))</span>
+    <span class="n">covectors</span> <span class="o">=</span> <span class="n">PointSet</span><span class="p">(</span><span class="n">covectors</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">covectors =&quot;</span><span class="p">,</span> <span class="n">covectors</span>
+
+
+
+
+<span class="c">#########################################################</span>
+<div class="viewcode-block" id="PolytopalComplex"><a class="viewcode-back" href="../../chompy.html#chompy.chompyconvex0.PolytopalComplex">[docs]</a><span class="k">class</span> <span class="nc">PolytopalComplex</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="c">#########################################################</span>
+    <span class="sd">&quot;&quot;&quot; The data type to represent a bounded convex set,</span>
+<span class="sd">        supporting a cell complex of polytopal boundary faces. &quot;&quot;&quot;</span>
+
+
+    <span class="c">## -- __init__ Method -------------------------------</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">convex</span> <span class="o">=</span> <span class="n">MKPOL</span><span class="p">([</span> <span class="n">points</span><span class="p">,</span> <span class="p">[</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">points</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)],</span> <span class="bp">None</span> <span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span> <span class="o">=</span> <span class="n">PointSet</span><span class="p">(</span><span class="n">S1</span><span class="p">(</span><span class="n">UKPOL</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">convex</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">m</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">dim</span>
+        <span class="k">def</span> <span class="nf">faces</span> <span class="p">(</span><span class="n">d</span><span class="p">):</span>
+            <span class="k">def</span> <span class="nf">faces0</span> <span class="p">(</span><span class="n">pol</span><span class="p">):</span>
+                <span class="n">facets</span> <span class="o">=</span> <span class="n">UKPOL</span><span class="p">(</span><span class="n">SKELETON</span><span class="p">(</span><span class="n">d</span><span class="p">)(</span><span class="n">pol</span><span class="p">))</span>
+                <span class="n">verts</span><span class="p">,</span><span class="n">cells</span><span class="p">,</span><span class="n">pols</span> <span class="o">=</span> <span class="n">facets</span>
+                <span class="k">return</span> <span class="p">[[</span><span class="n">verts</span><span class="p">[</span><span class="n">v</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">cell</span><span class="p">]</span> <span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="n">cells</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">faces0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cells</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">[[]]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cells</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">dict</span><span class="p">[</span><span class="n">code</span><span class="p">(</span><span class="n">p</span><span class="p">)]]</span>
+                         <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">S1</span><span class="p">(</span><span class="n">UKPOL</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">convex</span><span class="p">))]</span>
+        <span class="k">print</span> <span class="bp">self</span><span class="o">.</span><span class="n">cells</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cells</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">dict</span><span class="p">[</span><span class="n">code</span><span class="p">(</span><span class="n">p</span><span class="p">)]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">face</span><span class="p">]</span>
+                             <span class="k">for</span> <span class="n">face</span> <span class="ow">in</span> <span class="n">faces</span><span class="p">(</span><span class="n">d</span><span class="p">)(</span><span class="bp">self</span><span class="o">.</span><span class="n">convex</span><span class="p">)]</span>
+
+
+    <span class="c">## -- __repr__ Method -------------------------------</span>
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Return a string representation of this CellComplex in the form of a list of cells.&#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">Polytope: </span><span class="se">\n\t</span><span class="s">.n: {0}&#39;</span><span class="o">+</span> 
+                        <span class="s">&#39;</span><span class="se">\n\t</span><span class="s">.dim: {1}&#39;</span><span class="o">+</span> 
+        <span class="s">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">)</span>
+
+
+    <span class="c">## -- __str__ Method -------------------------------</span>
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Return a string representation of this CellComplex in the form of a list of cells.&#39;&#39;&#39;</span>
+        <span class="n">convex</span> <span class="o">=</span> <span class="n">UKPOL</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">convex</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">Polytope: </span><span class="se">\n\t</span><span class="s">.vertices: {0}&#39;</span><span class="o">+</span> 
+                        <span class="s">&#39;</span><span class="se">\n\t</span><span class="s">.cells: {1}&#39;</span><span class="o">+</span> 
+        <span class="s">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cells</span><span class="p">)</span>
+
+</div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">polytope</span> <span class="o">=</span> <span class="n">PolytopalComplex</span><span class="p">(</span><span class="n">S1</span><span class="p">(</span><span class="n">UKPOL</span><span class="p">(</span><span class="n">CUBOID</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]))))</span>
+    <span class="k">print</span> <span class="n">polytope</span>
+    <span class="k">print</span> <span class="nb">repr</span><span class="p">(</span><span class="n">polytope</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">Chompy 0.1 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, DIA -- Roma Tre University.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.
+    </div>
+  </body>
+</html>

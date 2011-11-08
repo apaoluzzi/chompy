@@ -1,0 +1,375 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>chompy.generate_modules &mdash; Chompy 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Chompy 0.1 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">Chompy 0.1 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for chompy.generate_modules</h1><div class="highlight"><pre>
+<span class="c">#!/usr/bin/env python</span>
+<span class="c"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">sphinx-autopackage-script</span>
+
+<span class="sd">This script parses a directory tree looking for python modules and packages and</span>
+<span class="sd">creates ReST files appropriately to create code documentation with Sphinx.</span>
+<span class="sd">It also creates a modules index (named modules.&lt;suffix&gt;).</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c"># This code was refactored by Robin Keller, rkeller@cars.com. The -1 option</span>
+<span class="c"># was added to allow the script to only generate one module per file.</span>
+
+<span class="c"># Copyright 2008 Société des arts technologiques (SAT), http://www.sat.qc.ca/</span>
+<span class="c"># Copyright 2010 Thomas Waldmann &lt;tw AT waldmann-edv DOT de&gt;</span>
+<span class="c"># All rights reserved.</span>
+<span class="c">#</span>
+<span class="c"># This program is free software: you can redistribute it and/or modify</span>
+<span class="c"># it under the terms of the GNU General Public License as published by</span>
+<span class="c"># the Free Software Foundation, either version 2 of the License, or</span>
+<span class="c"># (at your option) any later version.</span>
+<span class="c">#</span>
+<span class="c"># This program is distributed in the hope that it will be useful,</span>
+<span class="c"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c"># GNU General Public License for more details.</span>
+<span class="c">#</span>
+<span class="c"># You should have received a copy of the GNU General Public License</span>
+<span class="c"># along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">optparse</span>
+
+
+<span class="c"># automodule options</span>
+<span class="n">OPTIONS</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;members&#39;</span><span class="p">,</span>
+           <span class="s">&#39;undoc-members&#39;</span><span class="p">,</span>
+           <span class="s">&#39;inherited-members&#39;</span><span class="p">,</span>
+           <span class="s">&#39;show-inheritance&#39;</span><span class="p">,</span>
+          <span class="p">]</span>
+
+<span class="n">INIT</span> <span class="o">=</span> <span class="s">&#39;__init__.py&#39;</span>
+
+<div class="viewcode-block" id="makename"><a class="viewcode-back" href="../../chompy.html#chompy.generate_modules.makename">[docs]</a><span class="k">def</span> <span class="nf">makename</span><span class="p">(</span><span class="n">package</span><span class="p">,</span> <span class="n">module</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Join package and module with a dot.&quot;&quot;&quot;</span>
+    <span class="c"># Both package and module can be None/empty.</span>
+    <span class="k">if</span> <span class="n">package</span><span class="p">:</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">package</span>
+        <span class="k">if</span> <span class="n">module</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">+=</span> <span class="s">&#39;.&#39;</span> <span class="o">+</span> <span class="n">module</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">module</span>
+    <span class="k">return</span> <span class="n">name</span>
+</div>
+<div class="viewcode-block" id="write_file"><a class="viewcode-back" href="../../chompy.html#chompy.generate_modules.write_file">[docs]</a><span class="k">def</span> <span class="nf">write_file</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">opts</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Write the output file for module/package &lt;name&gt;.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">opts</span><span class="o">.</span><span class="n">dryrun</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">destdir</span><span class="p">,</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">.</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">opts</span><span class="o">.</span><span class="n">suffix</span><span class="p">))</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">opts</span><span class="o">.</span><span class="n">force</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s">&#39;File </span><span class="si">%s</span><span class="s"> already exists, skipping.&#39;</span> <span class="o">%</span> <span class="n">fname</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&#39;Creating file </span><span class="si">%s</span><span class="s">.&#39;</span> <span class="o">%</span> <span class="n">fname</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="format_heading"><a class="viewcode-back" href="../../chompy.html#chompy.generate_modules.format_heading">[docs]</a><span class="k">def</span> <span class="nf">format_heading</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create a heading of &lt;level&gt; [1, 2 or 3 supported].&quot;&quot;&quot;</span>
+    <span class="n">underlining</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;=&#39;</span><span class="p">,</span> <span class="s">&#39;-&#39;</span><span class="p">,</span> <span class="s">&#39;~&#39;</span><span class="p">,</span> <span class="p">][</span><span class="n">level</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s">&#39;</span><span class="si">%s</span><span class="se">\n</span><span class="si">%s</span><span class="se">\n\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">underlining</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="format_directive"><a class="viewcode-back" href="../../chompy.html#chompy.generate_modules.format_directive">[docs]</a><span class="k">def</span> <span class="nf">format_directive</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">package</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create the automodule directive and add the options.&quot;&quot;&quot;</span>
+    <span class="n">directive</span> <span class="o">=</span> <span class="s">&#39;.. automodule:: </span><span class="si">%s</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">makename</span><span class="p">(</span><span class="n">package</span><span class="p">,</span> <span class="n">module</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">option</span> <span class="ow">in</span> <span class="n">OPTIONS</span><span class="p">:</span>
+        <span class="n">directive</span> <span class="o">+=</span> <span class="s">&#39;    :</span><span class="si">%s</span><span class="s">:</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">option</span>
+    <span class="k">return</span> <span class="n">directive</span>
+</div>
+<div class="viewcode-block" id="create_module_file"><a class="viewcode-back" href="../../chompy.html#chompy.generate_modules.create_module_file">[docs]</a><span class="k">def</span> <span class="nf">create_module_file</span><span class="p">(</span><span class="n">package</span><span class="p">,</span> <span class="n">module</span><span class="p">,</span> <span class="n">opts</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Build the text of the file and write the file.&quot;&quot;&quot;</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">format_heading</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s"> Module&#39;</span> <span class="o">%</span> <span class="n">module</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">opts</span><span class="o">.</span><span class="n">onemodule</span><span class="p">:</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="n">format_heading</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s">&#39;:mod:`</span><span class="si">%s</span><span class="s">` Module&#39;</span> <span class="o">%</span> <span class="n">module</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">+=</span> <span class="n">format_directive</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">package</span><span class="p">)</span>
+    <span class="n">write_file</span><span class="p">(</span><span class="n">makename</span><span class="p">(</span><span class="n">package</span><span class="p">,</span> <span class="n">module</span><span class="p">),</span> <span class="n">text</span><span class="p">,</span> <span class="n">opts</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="create_package_file"><a class="viewcode-back" href="../../chompy.html#chompy.generate_modules.create_package_file">[docs]</a><span class="k">def</span> <span class="nf">create_package_file</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">master_package</span><span class="p">,</span> <span class="n">subroot</span><span class="p">,</span> <span class="n">py_files</span><span class="p">,</span> <span class="n">opts</span><span class="p">,</span> <span class="n">subs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Build the text of the file and write the file.&quot;&quot;&quot;</span>
+    <span class="n">package</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">root</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">format_heading</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s"> Package&#39;</span> <span class="o">%</span> <span class="n">package</span><span class="p">)</span>
+    <span class="c"># add each package&#39;s module</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">opts</span><span class="o">.</span><span class="n">onemodule</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">py_file</span> <span class="ow">in</span> <span class="n">py_files</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">shall_skip</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">py_file</span><span class="p">)):</span>
+                <span class="k">continue</span>
+            <span class="n">is_package</span> <span class="o">=</span> <span class="n">py_file</span> <span class="o">==</span> <span class="n">INIT</span>
+            <span class="n">py_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">py_file</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">py_path</span> <span class="o">=</span> <span class="n">makename</span><span class="p">(</span><span class="n">subroot</span><span class="p">,</span> <span class="n">py_file</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">is_package</span><span class="p">:</span>
+                <span class="n">heading</span> <span class="o">=</span> <span class="s">&#39;:mod:`</span><span class="si">%s</span><span class="s">` Package&#39;</span> <span class="o">%</span> <span class="n">package</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">heading</span> <span class="o">=</span> <span class="s">&#39;:mod:`</span><span class="si">%s</span><span class="s">` Module&#39;</span> <span class="o">%</span> <span class="n">py_file</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="n">format_heading</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">heading</span><span class="p">)</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="n">format_directive</span><span class="p">(</span><span class="n">is_package</span> <span class="ow">and</span> <span class="n">subroot</span> <span class="ow">or</span> <span class="n">py_path</span><span class="p">,</span> <span class="n">master_package</span><span class="p">)</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+
+    <span class="c"># build a list of directories that are packages (they contain an INIT file)</span>
+    <span class="n">subs</span> <span class="o">=</span> <span class="p">[</span><span class="n">sub</span> <span class="k">for</span> <span class="n">sub</span> <span class="ow">in</span> <span class="n">subs</span> <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">sub</span><span class="p">,</span> <span class="n">INIT</span><span class="p">))]</span>
+    <span class="c"># if there are some package directories, add a TOC for theses subpackages</span>
+    <span class="k">if</span> <span class="n">subs</span> <span class="ow">or</span> <span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">onemodule</span> <span class="ow">and</span> <span class="n">py_files</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">opts</span><span class="o">.</span><span class="n">onemodule</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="n">format_heading</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s">&#39;Subpackages&#39;</span><span class="p">)</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="s">&#39;.. toctree::</span><span class="se">\n\n</span><span class="s">&#39;</span>
+        <span class="k">for</span> <span class="n">sub</span> <span class="ow">in</span> <span class="n">subs</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s">&#39;    </span><span class="si">%s</span><span class="s">.</span><span class="si">%s</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">makename</span><span class="p">(</span><span class="n">master_package</span><span class="p">,</span> <span class="n">subroot</span><span class="p">),</span> <span class="n">sub</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">opts</span><span class="o">.</span><span class="n">onemodule</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">py_file</span> <span class="ow">in</span> <span class="n">py_files</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">py_file</span> <span class="o">==</span> <span class="n">INIT</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">text</span> <span class="o">+=</span> <span class="s">&#39;    </span><span class="si">%s</span><span class="s">.</span><span class="si">%s</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">makename</span><span class="p">(</span><span class="n">master_package</span><span class="p">,</span> <span class="n">subroot</span><span class="p">),</span> <span class="n">py_file</span><span class="p">[:</span><span class="o">-</span><span class="mi">3</span><span class="p">])</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+
+    <span class="n">write_file</span><span class="p">(</span><span class="n">makename</span><span class="p">(</span><span class="n">master_package</span><span class="p">,</span> <span class="n">subroot</span><span class="p">),</span> <span class="n">text</span><span class="p">,</span> <span class="n">opts</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="create_modules_toc_file"><a class="viewcode-back" href="../../chompy.html#chompy.generate_modules.create_modules_toc_file">[docs]</a><span class="k">def</span> <span class="nf">create_modules_toc_file</span><span class="p">(</span><span class="n">master_package</span><span class="p">,</span> <span class="n">modules</span><span class="p">,</span> <span class="n">opts</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;modules&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create the module&#39;s index.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">format_heading</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s"> Modules&#39;</span> <span class="o">%</span> <span class="n">opts</span><span class="o">.</span><span class="n">header</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">+=</span> <span class="s">&#39;.. toctree::</span><span class="se">\n</span><span class="s">&#39;</span>
+    <span class="n">text</span> <span class="o">+=</span> <span class="s">&#39;   :maxdepth: </span><span class="si">%s</span><span class="se">\n\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">opts</span><span class="o">.</span><span class="n">maxdepth</span>
+
+    <span class="n">modules</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+    <span class="n">prev_module</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+    <span class="k">for</span> <span class="n">module</span> <span class="ow">in</span> <span class="n">modules</span><span class="p">:</span>
+        <span class="c"># look if the module is a subpackage and, if yes, ignore it</span>
+        <span class="k">if</span> <span class="n">module</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">prev_module</span> <span class="o">+</span> <span class="s">&#39;.&#39;</span><span class="p">):</span>
+            <span class="k">continue</span>
+        <span class="n">prev_module</span> <span class="o">=</span> <span class="n">module</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="s">&#39;   </span><span class="si">%s</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">module</span>
+
+    <span class="n">write_file</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">opts</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="shall_skip"><a class="viewcode-back" href="../../chompy.html#chompy.generate_modules.shall_skip">[docs]</a><span class="k">def</span> <span class="nf">shall_skip</span><span class="p">(</span><span class="n">module</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if we want to skip this module.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c"># skip it, if there is nothing (or just \n or \r\n) in the file</span>
+    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">module</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span>
+</div>
+<div class="viewcode-block" id="recurse_tree"><a class="viewcode-back" href="../../chompy.html#chompy.generate_modules.recurse_tree">[docs]</a><span class="k">def</span> <span class="nf">recurse_tree</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">excludes</span><span class="p">,</span> <span class="n">opts</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Look for every file in the directory tree and create the corresponding</span>
+<span class="sd">    ReST files.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c"># use absolute path for root, as relative paths like &#39;../../foo&#39; cause</span>
+    <span class="c"># &#39;if &quot;/.&quot; in root ...&#39; to filter out *all* modules otherwise</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="c"># check if the base directory is a package and get is name</span>
+    <span class="k">if</span> <span class="n">INIT</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+        <span class="n">package_name</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">sep</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">package_name</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="n">toc</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">tree</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">root</span><span class="p">,</span> <span class="n">subs</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">tree</span><span class="p">:</span>
+        <span class="c"># keep only the Python script files</span>
+        <span class="n">py_files</span> <span class="o">=</span>  <span class="nb">sorted</span><span class="p">([</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files</span> <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">f</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;.py&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">INIT</span> <span class="ow">in</span> <span class="n">py_files</span><span class="p">:</span>
+            <span class="n">py_files</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">INIT</span><span class="p">)</span>
+            <span class="n">py_files</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">INIT</span><span class="p">)</span>
+        <span class="c"># remove hidden (&#39;.&#39;) and private (&#39;_&#39;) directories</span>
+        <span class="n">subs</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">([</span><span class="n">sub</span> <span class="k">for</span> <span class="n">sub</span> <span class="ow">in</span> <span class="n">subs</span> <span class="k">if</span> <span class="n">sub</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;.&#39;</span><span class="p">,</span> <span class="s">&#39;_&#39;</span><span class="p">]])</span>
+        <span class="c"># check if there are valid files to process</span>
+        <span class="c"># TODO: could add check for windows hidden files</span>
+        <span class="k">if</span> <span class="s">&quot;/.&quot;</span> <span class="ow">in</span> <span class="n">root</span> <span class="ow">or</span> <span class="s">&quot;/_&quot;</span> <span class="ow">in</span> <span class="n">root</span> \
+        <span class="ow">or</span> <span class="ow">not</span> <span class="n">py_files</span> \
+        <span class="ow">or</span> <span class="n">is_excluded</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">excludes</span><span class="p">):</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="n">INIT</span> <span class="ow">in</span> <span class="n">py_files</span><span class="p">:</span>
+            <span class="c"># we are in package ...</span>
+            <span class="k">if</span> <span class="p">(</span><span class="c"># ... with subpackage(s)</span>
+                <span class="n">subs</span>
+                <span class="ow">or</span>
+                <span class="c"># ... with some module(s)</span>
+                <span class="nb">len</span><span class="p">(</span><span class="n">py_files</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span>
+                <span class="ow">or</span>
+                <span class="c"># ... with a not-to-be-skipped INIT file</span>
+                <span class="ow">not</span> <span class="n">shall_skip</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">INIT</span><span class="p">))</span>
+               <span class="p">):</span>
+                <span class="n">subroot</span> <span class="o">=</span> <span class="n">root</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">path</span><span class="p">):]</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">sep</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">sep</span><span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">)</span>
+                <span class="n">create_package_file</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">package_name</span><span class="p">,</span> <span class="n">subroot</span><span class="p">,</span> <span class="n">py_files</span><span class="p">,</span> <span class="n">opts</span><span class="p">,</span> <span class="n">subs</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">opts</span><span class="o">.</span><span class="n">onemodule</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">py_file</span> <span class="ow">in</span> <span class="n">py_files</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">py_file</span> <span class="o">==</span> <span class="n">INIT</span><span class="p">:</span>
+                            <span class="k">continue</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">shall_skip</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">py_file</span><span class="p">)):</span>
+                            <span class="n">module</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">py_file</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                            <span class="n">create_module_file</span><span class="p">(</span><span class="n">makename</span><span class="p">(</span><span class="n">package_name</span><span class="p">,</span> <span class="n">subroot</span><span class="p">),</span> <span class="n">module</span><span class="p">,</span> <span class="n">opts</span><span class="p">)</span>
+                            <span class="n">toc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">makename</span><span class="p">(</span><span class="n">package_name</span><span class="p">,</span> <span class="n">module</span><span class="p">))</span>
+                <span class="n">toc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">makename</span><span class="p">(</span><span class="n">package_name</span><span class="p">,</span> <span class="n">subroot</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">root</span> <span class="o">==</span> <span class="n">path</span><span class="p">:</span>
+            <span class="c"># if we are at the root level, we don&#39;t require it to be a package</span>
+            <span class="k">for</span> <span class="n">py_file</span> <span class="ow">in</span> <span class="n">py_files</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">shall_skip</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">py_file</span><span class="p">)):</span>
+                    <span class="n">module</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">py_file</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">create_module_file</span><span class="p">(</span><span class="n">package_name</span><span class="p">,</span> <span class="n">module</span><span class="p">,</span> <span class="n">opts</span><span class="p">)</span>
+                    <span class="n">toc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">makename</span><span class="p">(</span><span class="n">package_name</span><span class="p">,</span> <span class="n">module</span><span class="p">))</span>
+
+    <span class="c"># create the module&#39;s index</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">opts</span><span class="o">.</span><span class="n">notoc</span><span class="p">:</span>
+        <span class="n">create_modules_toc_file</span><span class="p">(</span><span class="n">package_name</span><span class="p">,</span> <span class="n">toc</span><span class="p">,</span> <span class="n">opts</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="normalize_excludes"><a class="viewcode-back" href="../../chompy.html#chompy.generate_modules.normalize_excludes">[docs]</a><span class="k">def</span> <span class="nf">normalize_excludes</span><span class="p">(</span><span class="n">rootpath</span><span class="p">,</span> <span class="n">excludes</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Normalize the excluded directory list:</span>
+<span class="sd">    * must be either an absolute path or start with rootpath,</span>
+<span class="sd">    * otherwise it is joined with rootpath</span>
+<span class="sd">    * with trailing slash</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">sep</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">sep</span>
+    <span class="n">f_excludes</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">exclude</span> <span class="ow">in</span> <span class="n">excludes</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isabs</span><span class="p">(</span><span class="n">exclude</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">exclude</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">rootpath</span><span class="p">):</span>
+            <span class="n">exclude</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rootpath</span><span class="p">,</span> <span class="n">exclude</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">exclude</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">sep</span><span class="p">):</span>
+            <span class="n">exclude</span> <span class="o">+=</span> <span class="n">sep</span>
+        <span class="n">f_excludes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">exclude</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">f_excludes</span>
+</div>
+<div class="viewcode-block" id="is_excluded"><a class="viewcode-back" href="../../chompy.html#chompy.generate_modules.is_excluded">[docs]</a><span class="k">def</span> <span class="nf">is_excluded</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">excludes</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if the directory is in the exclude list.</span>
+
+<span class="sd">    Note: by having trailing slashes, we avoid common prefix issues, like</span>
+<span class="sd">          e.g. an exlude &quot;foo&quot; also accidentally excluding &quot;foobar&quot;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">sep</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">sep</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">root</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">sep</span><span class="p">):</span>
+        <span class="n">root</span> <span class="o">+=</span> <span class="n">sep</span>
+    <span class="k">for</span> <span class="n">exclude</span> <span class="ow">in</span> <span class="n">excludes</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">root</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">exclude</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">True</span>
+    <span class="k">return</span> <span class="bp">False</span>
+</div>
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../chompy.html#chompy.generate_modules.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parse and check the command line arguments.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">optparse</span><span class="o">.</span><span class="n">OptionParser</span><span class="p">(</span><span class="n">usage</span><span class="o">=</span><span class="s">&quot;&quot;&quot;usage: %prog [options] &lt;package path&gt; [exclude paths, ...]</span>
+
+<span class="s">Note: By default this script will not overwrite already created files.&quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;-n&quot;</span><span class="p">,</span> <span class="s">&quot;--doc-header&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&quot;store&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&quot;header&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s">&quot;Documentation Header (default=Project)&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&quot;Project&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;-d&quot;</span><span class="p">,</span> <span class="s">&quot;--dest-dir&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&quot;store&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&quot;destdir&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s">&quot;Output destination directory&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;-s&quot;</span><span class="p">,</span> <span class="s">&quot;--suffix&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&quot;store&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&quot;suffix&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s">&quot;module suffix (default=txt)&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&quot;txt&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;-m&quot;</span><span class="p">,</span> <span class="s">&quot;--maxdepth&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&quot;store&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&quot;maxdepth&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s">&quot;Maximum depth of submodules to show in the TOC (default=4)&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s">&quot;int&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;-r&quot;</span><span class="p">,</span> <span class="s">&quot;--dry-run&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&quot;dryrun&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s">&quot;Run the script without creating the files&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;-f&quot;</span><span class="p">,</span> <span class="s">&quot;--force&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&quot;force&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s">&quot;Overwrite all the files&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;-t&quot;</span><span class="p">,</span> <span class="s">&quot;--no-toc&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&quot;notoc&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s">&quot;Don&#39;t create the table of content file&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;-1&quot;</span><span class="p">,</span> <span class="s">&quot;--one-module&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&quot;onemodule&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s">&quot;Store only one module per file&quot;</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">opts</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="p">:</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;package path is required.&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">rootpath</span><span class="p">,</span> <span class="n">excludes</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">rootpath</span><span class="p">):</span>
+            <span class="c"># check if the output destination is a valid directory</span>
+            <span class="k">if</span> <span class="n">opts</span><span class="o">.</span><span class="n">destdir</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">destdir</span><span class="p">):</span>
+                <span class="n">excludes</span> <span class="o">=</span> <span class="n">normalize_excludes</span><span class="p">(</span><span class="n">rootpath</span><span class="p">,</span> <span class="n">excludes</span><span class="p">)</span>
+                <span class="n">recurse_tree</span><span class="p">(</span><span class="n">rootpath</span><span class="p">,</span> <span class="n">excludes</span><span class="p">,</span> <span class="n">opts</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">print</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s"> is not a valid output destination directory.&#39;</span> <span class="o">%</span> <span class="n">opts</span><span class="o">.</span><span class="n">destdir</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s"> is not a valid directory.&#39;</span> <span class="o">%</span> <span class="n">rootpath</span>
+
+</div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">Chompy 0.1 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, DIA -- Roma Tre University.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.
+    </div>
+  </body>
+</html>

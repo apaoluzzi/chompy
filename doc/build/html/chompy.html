@@ -1,0 +1,1278 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>chompy Package &mdash; Chompy 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Chompy 0.1 documentation" href="index.html" />
+    <link rel="up" title="Project Modules" href="modules.html" />
+    <link rel="prev" title="Project Modules" href="modules.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="Project Modules"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Chompy 0.1 documentation</a> &raquo;</li>
+          <li><a href="modules.html" accesskey="U">Project Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="chompy-package">
+<h1>chompy Package<a class="headerlink" href="#chompy-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-chompy.chompyCcomplex">
+<span id="chompyccomplex-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">chompyCcomplex</span></tt> Module<a class="headerlink" href="#module-chompy.chompyCcomplex" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="chompy.chompyCcomplex.CuboidalComplex">
+<em class="property">class </em><tt class="descclassname">chompy.chompyCcomplex.</tt><tt class="descname">CuboidalComplex</tt><big>(</big><em>sides</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyCcomplex.html#CuboidalComplex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyCcomplex.CuboidalComplex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#chompy.chompyPcomplex.PolytopalComplex" title="chompy.chompyPcomplex.PolytopalComplex"><tt class="xref py py-class docutils literal"><span class="pre">chompy.chompyPcomplex.PolytopalComplex</span></tt></a></p>
+<p>The data type to represent a grid of (hyper)cuboids.
+Efficient generation of every subset of d-dimensional faces.</p>
+<dl class="method">
+<dt id="chompy.chompyCcomplex.CuboidalComplex.boundary">
+<tt class="descname">boundary</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/chompy/chompyCcomplex.html#CuboidalComplex.boundary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyCcomplex.CuboidalComplex.boundary" title="Permalink to this definition">¶</a></dt>
+<dd><p>To compute the boundary of a cuboidal d-complex.</p>
+<p>Return the closed (polytopal) boundary (d-1)-complex .</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyCcomplex.CuboidalComplex.chain_complex">
+<tt class="descname">chain_complex</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/chompy/chompyCcomplex.html#CuboidalComplex.chain_complex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyCcomplex.CuboidalComplex.chain_complex" title="Permalink to this definition">¶</a></dt>
+<dd><p>To compute d adjacency matrices that implement the boundary maps.</p>
+<p>Return a list of sparse matrices in CSR (Compressed Sparse Row) format.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyCcomplex.CuboidalComplex.copy">
+<tt class="descname">copy</tt><big>(</big><big>)</big><a class="headerlink" href="#chompy.chompyCcomplex.CuboidalComplex.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>To make a copy of a cellComplex object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyCcomplex.CuboidalComplex.hpolc">
+<tt class="descname">hpolc</tt><big>(</big><big>)</big><a class="headerlink" href="#chompy.chompyCcomplex.CuboidalComplex.hpolc" title="Permalink to this definition">¶</a></dt>
+<dd><p>To transform a PolytopalComplex into a Hierarchical
+Polyhedral Complex (HPC).</p>
+<p>Return an object of Hpc class.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyCcomplex.CuboidalComplex.mktables">
+<tt class="descname">mktables</tt><big>(</big><em>cells</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyCcomplex.html#CuboidalComplex.mktables"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyCcomplex.CuboidalComplex.mktables" title="Permalink to this definition">¶</a></dt>
+<dd><p>To build the cell database of a cell complex.</p>
+<p>Return a list of d+1 dictionaries, where d is the dimension of the complex.
+Key is the &#8216;repr&#8217; of the cells; values are integers in range(0,k[d]) where
+k[d] is the cardinality of the d-skeleton.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyCcomplex.CuboidalComplex.skeleton">
+<tt class="descname">skeleton</tt><big>(</big><em>d</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyCcomplex.html#CuboidalComplex.skeleton"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyCcomplex.CuboidalComplex.skeleton" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns the d-skeleton of a cuboidal complex</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyCcomplex.CuboidalComplex.ukpol">
+<tt class="descname">ukpol</tt><big>(</big><big>)</big><a class="headerlink" href="#chompy.chompyCcomplex.CuboidalComplex.ukpol" title="Permalink to this definition">¶</a></dt>
+<dd><p>To the &#8220;UKPOL&#8221; of a simplicial d-complex.</p>
+<p>Return a tuple verts, cells[d].</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyCcomplex.CuboidalComplex.view">
+<tt class="descname">view</tt><big>(</big><em>d=1</em><big>)</big><a class="headerlink" href="#chompy.chompyCcomplex.CuboidalComplex.view" title="Permalink to this definition">¶</a></dt>
+<dd><p>To give Plasm a PolytopalComplex to visualize.</p>
+<p>Return &#8216;None&#8217;.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyCcomplex.CuboidalComplex.write">
+<tt class="descname">write</tt><big>(</big><em>file_name</em><big>)</big><a class="headerlink" href="#chompy.chompyCcomplex.CuboidalComplex.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>To write a &#8216;.psm&#8217; output file, with plasm syntax.</p>
+<p>Return &#8216;None&#8217;.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyCcomplex.cfacets">
+<tt class="descclassname">chompy.chompyCcomplex.</tt><tt class="descname">cfacets</tt><big>(</big><em>ccomplex</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyCcomplex.html#cfacets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyCcomplex.cfacets" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyCcomplex.findsubsets">
+<tt class="descclassname">chompy.chompyCcomplex.</tt><tt class="descname">findsubsets</tt><big>(</big><em>S</em>, <em>m</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyCcomplex.html#findsubsets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyCcomplex.findsubsets" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyCcomplex.incr">
+<tt class="descclassname">chompy.chompyCcomplex.</tt><tt class="descname">incr</tt><big>(</big><em>listOfLists</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyCcomplex.html#incr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyCcomplex.incr" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyCcomplex.index">
+<tt class="descclassname">chompy.chompyCcomplex.</tt><tt class="descname">index</tt><big>(</big><em>shape</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyCcomplex.html#index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyCcomplex.index" title="Permalink to this definition">¶</a></dt>
+<dd><p>index(shape)(offset) is the inverse of offset(shape)(index).
+To convert an integer offset to a multidimensional array index.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyCcomplex.offset">
+<tt class="descclassname">chompy.chompyCcomplex.</tt><tt class="descname">offset</tt><big>(</big><em>shape</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyCcomplex.html#offset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyCcomplex.offset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Translation from multidimensional array index to linear offset.
+Formula: offset(D) = D0xS1x...xSn + D1xS2x...xSn + D(n-1)xSn + Dn</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyCcomplex.pgrid">
+<tt class="descclassname">chompy.chompyCcomplex.</tt><tt class="descname">pgrid</tt><big>(</big><em>sides</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyCcomplex.html#pgrid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyCcomplex.pgrid" title="Permalink to this definition">¶</a></dt>
+<dd><p>To generate a d-dimensional (hyper-)cuboid grid.
+shape = shape of the node array.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-chompy.chompyDcomplex">
+<span id="chompydcomplex-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">chompyDcomplex</span></tt> Module<a class="headerlink" href="#module-chompy.chompyDcomplex" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="chompy.chompyDcomplex.CofaceComplex">
+<em class="property">class </em><tt class="descclassname">chompy.chompyDcomplex.</tt><tt class="descname">CofaceComplex</tt><big>(</big><em>coverts</em>, <em>cocells=</em><span class="optional">[</span><span class="optional">]</span>, <em>dim=3</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyDcomplex.html#CofaceComplex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyDcomplex.CofaceComplex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#chompy.chompyPcomplex.PolytopalComplex" title="chompy.chompyPcomplex.PolytopalComplex"><tt class="xref py py-class docutils literal"><span class="pre">chompy.chompyPcomplex.PolytopalComplex</span></tt></a></p>
+<dl class="method">
+<dt id="chompy.chompyDcomplex.CofaceComplex.boundary">
+<tt class="descname">boundary</tt><big>(</big><big>)</big><a class="headerlink" href="#chompy.chompyDcomplex.CofaceComplex.boundary" title="Permalink to this definition">¶</a></dt>
+<dd><p>To compute the boundary of a polytopal d-complex.</p>
+<p>Return the closed (polytopal) boundary (d-1)-complex .</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyDcomplex.CofaceComplex.chain_complex">
+<tt class="descname">chain_complex</tt><big>(</big><big>)</big><a class="headerlink" href="#chompy.chompyDcomplex.CofaceComplex.chain_complex" title="Permalink to this definition">¶</a></dt>
+<dd><p>To compute d adjacency matrices that implement the boundary maps.
+Return a list of sparse matrices in CSR (Compressed Sparse Row) format.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyDcomplex.CofaceComplex.copy">
+<tt class="descname">copy</tt><big>(</big><big>)</big><a class="headerlink" href="#chompy.chompyDcomplex.CofaceComplex.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>To make a copy of a cellComplex object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyDcomplex.CofaceComplex.hpolc">
+<tt class="descname">hpolc</tt><big>(</big><big>)</big><a class="headerlink" href="#chompy.chompyDcomplex.CofaceComplex.hpolc" title="Permalink to this definition">¶</a></dt>
+<dd><p>To transform a PolytopalComplex into a Hierarchical
+Polyhedral Complex (HPC).</p>
+<p>Return an object of Hpc class.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyDcomplex.CofaceComplex.ukpol">
+<tt class="descname">ukpol</tt><big>(</big><big>)</big><a class="headerlink" href="#chompy.chompyDcomplex.CofaceComplex.ukpol" title="Permalink to this definition">¶</a></dt>
+<dd><p>To the &#8220;UKPOL&#8221; of a simplicial d-complex.</p>
+<p>Return a tuple verts, cells[d].</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyDcomplex.CofaceComplex.view">
+<tt class="descname">view</tt><big>(</big><em>d=1</em><big>)</big><a class="headerlink" href="#chompy.chompyDcomplex.CofaceComplex.view" title="Permalink to this definition">¶</a></dt>
+<dd><p>To give Plasm a PolytopalComplex to visualize.</p>
+<p>Return &#8216;None&#8217;.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyDcomplex.CofaceComplex.write">
+<tt class="descname">write</tt><big>(</big><em>file_name</em><big>)</big><a class="headerlink" href="#chompy.chompyDcomplex.CofaceComplex.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>To write a &#8216;.psm&#8217; output file, with plasm syntax.</p>
+<p>Return &#8216;None&#8217;.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="chompy.chompyDcomplex.CovertexSet">
+<em class="property">class </em><tt class="descclassname">chompy.chompyDcomplex.</tt><tt class="descname">CovertexSet</tt><big>(</big><em>coverts</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyDcomplex.html#CovertexSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyDcomplex.CovertexSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#chompy.chompyPointSet.PointSet" title="chompy.chompyPointSet.PointSet"><tt class="xref py py-class docutils literal"><span class="pre">chompy.chompyPointSet.PointSet</span></tt></a></p>
+<p>The data type to represent a set of points,
+supporting a cell complex.</p>
+<dl class="method">
+<dt id="chompy.chompyDcomplex.CovertexSet.Med">
+<tt class="descname">Med</tt><big>(</big><big>)</big><a class="headerlink" href="#chompy.chompyDcomplex.CovertexSet.Med" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyDcomplex.CovertexSet.append">
+<tt class="descname">append</tt><big>(</big><big>)</big><a class="headerlink" href="#chompy.chompyDcomplex.CovertexSet.append" title="Permalink to this definition">¶</a></dt>
+<dd><p>L.append(object) &#8211; append object to end</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyDcomplex.CovertexSet.copy">
+<tt class="descname">copy</tt><big>(</big><big>)</big><a class="headerlink" href="#chompy.chompyDcomplex.CovertexSet.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>To make a copy of a PointSet object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyDcomplex.CovertexSet.count">
+<tt class="descname">count</tt><big>(</big><em>value</em><big>)</big> &rarr; integer -- return number of occurrences of value<a class="headerlink" href="#chompy.chompyDcomplex.CovertexSet.count" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyDcomplex.CovertexSet.embed">
+<tt class="descname">embed</tt><big>(</big><em>n</em><big>)</big><a class="headerlink" href="#chompy.chompyDcomplex.CovertexSet.embed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyDcomplex.CovertexSet.extend">
+<tt class="descname">extend</tt><big>(</big><big>)</big><a class="headerlink" href="#chompy.chompyDcomplex.CovertexSet.extend" title="Permalink to this definition">¶</a></dt>
+<dd><p>L.extend(iterable) &#8211; extend list by appending elements from the iterable</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyDcomplex.CovertexSet.index">
+<tt class="descname">index</tt><big>(</big><em>value</em><span class="optional">[</span>, <em>start</em><span class="optional">[</span>, <em>stop</em><span class="optional">]</span><span class="optional">]</span><big>)</big> &rarr; integer -- return first index of value.<a class="headerlink" href="#chompy.chompyDcomplex.CovertexSet.index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raises ValueError if the value is not present.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyDcomplex.CovertexSet.insert">
+<tt class="descname">insert</tt><big>(</big><em>point</em><big>)</big><a class="headerlink" href="#chompy.chompyDcomplex.CovertexSet.insert" title="Permalink to this definition">¶</a></dt>
+<dd><p>To add a point (if not already present) to a PointSet object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyDcomplex.CovertexSet.max">
+<tt class="descname">max</tt><big>(</big><big>)</big><a class="headerlink" href="#chompy.chompyDcomplex.CovertexSet.max" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyDcomplex.CovertexSet.min">
+<tt class="descname">min</tt><big>(</big><big>)</big><a class="headerlink" href="#chompy.chompyDcomplex.CovertexSet.min" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyDcomplex.CovertexSet.normalize">
+<tt class="descname">normalize</tt><big>(</big><big>)</big><a class="headerlink" href="#chompy.chompyDcomplex.CovertexSet.normalize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyDcomplex.CovertexSet.pop">
+<tt class="descname">pop</tt><big>(</big><span class="optional">[</span><em>index</em><span class="optional">]</span><big>)</big> &rarr; item -- remove and return item at index (default last).<a class="headerlink" href="#chompy.chompyDcomplex.CovertexSet.pop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raises IndexError if list is empty or index is out of range.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyDcomplex.CovertexSet.remove">
+<tt class="descname">remove</tt><big>(</big><big>)</big><a class="headerlink" href="#chompy.chompyDcomplex.CovertexSet.remove" title="Permalink to this definition">¶</a></dt>
+<dd><p>L.remove(value) &#8211; remove first occurrence of value.
+Raises ValueError if the value is not present.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyDcomplex.CovertexSet.reverse">
+<tt class="descname">reverse</tt><big>(</big><big>)</big><a class="headerlink" href="#chompy.chompyDcomplex.CovertexSet.reverse" title="Permalink to this definition">¶</a></dt>
+<dd><p>L.reverse() &#8211; reverse <em>IN PLACE</em></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyDcomplex.CovertexSet.rotate">
+<tt class="descname">rotate</tt><big>(</big><em>axis1</em>, <em>axis2</em>, <em>angle</em><big>)</big><a class="headerlink" href="#chompy.chompyDcomplex.CovertexSet.rotate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyDcomplex.CovertexSet.scale">
+<tt class="descname">scale</tt><big>(</big><em>vect</em><big>)</big><a class="headerlink" href="#chompy.chompyDcomplex.CovertexSet.scale" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyDcomplex.CovertexSet.sort">
+<tt class="descname">sort</tt><big>(</big><big>)</big><a class="headerlink" href="#chompy.chompyDcomplex.CovertexSet.sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>L.sort(cmp=None, key=None, reverse=False) &#8211; stable sort <em>IN PLACE</em>;
+cmp(x, y) -&gt; -1, 0, 1</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyDcomplex.CovertexSet.translate">
+<tt class="descname">translate</tt><big>(</big><em>vect</em><big>)</big><a class="headerlink" href="#chompy.chompyDcomplex.CovertexSet.translate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyDcomplex.CovertexSet.update">
+<tt class="descname">update</tt><big>(</big><em>modify</em><big>)</big><a class="headerlink" href="#chompy.chompyDcomplex.CovertexSet.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>To update a PointSet object without change the element ordering.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="chompy.chompyDcomplex.DualComplex">
+<em class="property">class </em><tt class="descclassname">chompy.chompyDcomplex.</tt><tt class="descname">DualComplex</tt><big>(</big><em>hpc</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyDcomplex.html#DualComplex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyDcomplex.DualComplex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#chompy.chompyPcomplex.PolytopalComplex" title="chompy.chompyPcomplex.PolytopalComplex"><tt class="xref py py-class docutils literal"><span class="pre">chompy.chompyPcomplex.PolytopalComplex</span></tt></a></p>
+<p>Input: a hierarchical polyhedral complex (HPC data structure)</p>
+<dl class="method">
+<dt id="chompy.chompyDcomplex.DualComplex.boundary">
+<tt class="descname">boundary</tt><big>(</big><big>)</big><a class="headerlink" href="#chompy.chompyDcomplex.DualComplex.boundary" title="Permalink to this definition">¶</a></dt>
+<dd><p>To compute the boundary of a polytopal d-complex.</p>
+<p>Return the closed (polytopal) boundary (d-1)-complex .</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyDcomplex.DualComplex.chain_complex">
+<tt class="descname">chain_complex</tt><big>(</big><big>)</big><a class="headerlink" href="#chompy.chompyDcomplex.DualComplex.chain_complex" title="Permalink to this definition">¶</a></dt>
+<dd><p>To compute d adjacency matrices that implement the boundary maps.
+Return a list of sparse matrices in CSR (Compressed Sparse Row) format.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyDcomplex.DualComplex.copy">
+<tt class="descname">copy</tt><big>(</big><big>)</big><a class="headerlink" href="#chompy.chompyDcomplex.DualComplex.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>To make a copy of a cellComplex object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyDcomplex.DualComplex.hpolc">
+<tt class="descname">hpolc</tt><big>(</big><big>)</big><a class="headerlink" href="#chompy.chompyDcomplex.DualComplex.hpolc" title="Permalink to this definition">¶</a></dt>
+<dd><p>To transform a PolytopalComplex into a Hierarchical
+Polyhedral Complex (HPC).</p>
+<p>Return an object of Hpc class.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyDcomplex.DualComplex.pointMembership">
+<tt class="descname">pointMembership</tt><big>(</big><em>p</em>, <em>coface</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyDcomplex.html#DualComplex.pointMembership"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyDcomplex.DualComplex.pointMembership" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyDcomplex.DualComplex.ukpol">
+<tt class="descname">ukpol</tt><big>(</big><big>)</big><a class="headerlink" href="#chompy.chompyDcomplex.DualComplex.ukpol" title="Permalink to this definition">¶</a></dt>
+<dd><p>To the &#8220;UKPOL&#8221; of a simplicial d-complex.</p>
+<p>Return a tuple verts, cells[d].</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyDcomplex.DualComplex.view">
+<tt class="descname">view</tt><big>(</big><em>d=1</em><big>)</big><a class="headerlink" href="#chompy.chompyDcomplex.DualComplex.view" title="Permalink to this definition">¶</a></dt>
+<dd><p>To give Plasm a PolytopalComplex to visualize.</p>
+<p>Return &#8216;None&#8217;.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyDcomplex.DualComplex.write">
+<tt class="descname">write</tt><big>(</big><em>file_name</em><big>)</big><a class="headerlink" href="#chompy.chompyDcomplex.DualComplex.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>To write a &#8216;.psm&#8217; output file, with plasm syntax.</p>
+<p>Return &#8216;None&#8217;.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-chompy.chompyIntegr">
+<span id="chompyintegr-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">chompyIntegr</span></tt> Module<a class="headerlink" href="#module-chompy.chompyIntegr" title="Permalink to this headline">¶</a></h2>
+<p>Module for boundary integration of polynomials over three-dimensional
+simplicial domains.</p>
+<p>Look for method documentation in:
+C, Cattani and A. Paoluzzi: Boundary integration over linear polyhedra.
+Computer-Aided Design 22(2): 130-135 (1990) (doi:10.1016/0010-4485(90)90007-Y</p>
+<dl class="function">
+<dt id="chompy.chompyIntegr.II">
+<tt class="descclassname">chompy.chompyIntegr.</tt><tt class="descname">II</tt><big>(</big><em>surface</em>, <em>alpha</em>, <em>beta</em>, <em>gamma</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyIntegr.html#II"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyIntegr.II" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyIntegr.III">
+<tt class="descclassname">chompy.chompyIntegr.</tt><tt class="descname">III</tt><big>(</big><em>surface</em>, <em>alpha</em>, <em>beta</em>, <em>gamma</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyIntegr.html#III"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyIntegr.III" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyIntegr.M">
+<tt class="descclassname">chompy.chompyIntegr.</tt><tt class="descname">M</tt><big>(</big><em>alpha</em>, <em>beta</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyIntegr.html#M"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyIntegr.M" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyIntegr.T3">
+<tt class="descclassname">chompy.chompyIntegr.</tt><tt class="descname">T3</tt><big>(</big><em>triangle</em>, <em>alpha</em>, <em>beta</em>, <em>gamma</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyIntegr.html#T3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyIntegr.T3" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyIntegr.choose">
+<tt class="descclassname">chompy.chompyIntegr.</tt><tt class="descname">choose</tt><big>(</big><em>n</em>, <em>k</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyIntegr.html#choose"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyIntegr.choose" title="Permalink to this definition">¶</a></dt>
+<dd><p>To compute a binomial number.
+Efficient linear recursion implemented.</p>
+<p>Return an integer number.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyIntegr.complex2surface">
+<tt class="descclassname">chompy.chompyIntegr.</tt><tt class="descname">complex2surface</tt><big>(</big><em>obj</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyIntegr.html#complex2surface"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyIntegr.complex2surface" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transforms the 2-skeleton of a simplicial complex in a triangulated surface.</p>
+<p>Return a list of triples of surface vertices (nD points).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyIntegr.rand">
+<tt class="descclassname">chompy.chompyIntegr.</tt><tt class="descname">rand</tt><big>(</big><em>d0</em>, <em>d1</em>, <em>...</em>, <em>dn</em><big>)</big><a class="headerlink" href="#chompy.chompyIntegr.rand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Random values in a given shape.</p>
+<p>Create an array of the given shape and propagate it with
+random samples from a uniform distribution
+over <tt class="docutils literal"><span class="pre">[0,</span> <span class="pre">1)</span></tt>.</p>
+<dl class="docutils">
+<dt>d0, d1, ..., dn <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>Shape of the output.</dd>
+</dl>
+<dl class="docutils">
+<dt>out <span class="classifier-delimiter">:</span> <span class="classifier">ndarray, shape <tt class="docutils literal"><span class="pre">(d0,</span> <span class="pre">d1,</span> <span class="pre">...,</span> <span class="pre">dn)</span></tt></span></dt>
+<dd>Random values.</dd>
+</dl>
+<p>random</p>
+<p>This is a convenience function. If you want an interface that
+takes a shape-tuple as the first argument, refer to
+<cite>random</cite>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">array([[ 0.14022471,  0.96360618],  #random</span>
+<span class="go">       [ 0.37601032,  0.25528411],  #random</span>
+<span class="go">       [ 0.49313049,  0.94909878]]) #random</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyIntegr.randn">
+<tt class="descclassname">chompy.chompyIntegr.</tt><tt class="descname">randn</tt><big>(</big><span class="optional">[</span><em>d1</em>, <em>...</em>, <em>dn</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#chompy.chompyIntegr.randn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a sample (or samples) from the &#8220;standard normal&#8221; distribution.</p>
+<p>If positive, int_like or int-convertible arguments are provided,
+<cite>randn</cite> generates an array of shape <tt class="docutils literal"><span class="pre">(d1,</span> <span class="pre">...,</span> <span class="pre">dn)</span></tt>, filled
+with random floats sampled from a univariate &#8220;normal&#8221; (Gaussian)
+distribution of mean 0 and variance 1 (if any of the <img class="math" src="_images/math/f1544d77330dc5a289ad6a42beeb236b8dd70a9a.png" alt="d_i"/> are
+floats, they are first converted to integers by truncation). A single
+float randomly sampled from the distribution is returned if no
+argument is provided.</p>
+<p>This is a convenience function.  If you want an interface that takes a
+tuple as the first argument, use <cite>numpy.random.standard_normal</cite> instead.</p>
+<dl class="docutils">
+<dt>d1, ..., dn <span class="classifier-delimiter">:</span> <span class="classifier"><cite>n</cite> ints, optional</span></dt>
+<dd>The dimensions of the returned array, should be all positive.</dd>
+</dl>
+<dl class="docutils">
+<dt>Z <span class="classifier-delimiter">:</span> <span class="classifier">ndarray or float</span></dt>
+<dd>A <tt class="docutils literal"><span class="pre">(d1,</span> <span class="pre">...,</span> <span class="pre">dn)</span></tt>-shaped array of floating-point samples from
+the standard normal distribution, or a single such float if
+no parameters were supplied.</dd>
+</dl>
+<p>random.standard_normal : Similar, but takes a tuple as its argument.</p>
+<p>For random samples from <img class="math" src="_images/math/adbb4ce441cd7277f61353fde37bbd8150e05a55.png" alt="N(\mu, \sigma^2)"/>, use:</p>
+<p><tt class="docutils literal"><span class="pre">sigma</span> <span class="pre">*</span> <span class="pre">np.random.randn(...)</span> <span class="pre">+</span> <span class="pre">mu</span></tt></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">()</span>
+<span class="go">2.1923875335537315 #random</span>
+</pre></div>
+</div>
+<p>Two-by-four array of samples from N(3, 6.25):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="mf">2.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="mi">3</span>
+<span class="go">array([[-4.49401501,  4.00950034, -1.81814867,  7.29718677],  #random</span>
+<span class="go">       [ 0.39924804,  4.68456316,  4.99394529,  4.84057254]]) #random</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyIntegr.times">
+<tt class="descclassname">chompy.chompyIntegr.</tt><tt class="descname">times</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyIntegr.html#times"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyIntegr.times" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-chompy.chompyPcomplex">
+<span id="chompypcomplex-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">chompyPcomplex</span></tt> Module<a class="headerlink" href="#module-chompy.chompyPcomplex" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="chompy.chompyPcomplex.PolytopalComplex">
+<em class="property">class </em><tt class="descclassname">chompy.chompyPcomplex.</tt><tt class="descname">PolytopalComplex</tt><big>(</big><em>points</em>, <em>cells=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="_modules/chompy/chompyPcomplex.html#PolytopalComplex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyPcomplex.PolytopalComplex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>The data type to represent a bounded convex set,
+supporting a cell complex of polytopal boundary faces.</p>
+<dl class="method">
+<dt id="chompy.chompyPcomplex.PolytopalComplex.boundary">
+<tt class="descname">boundary</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/chompy/chompyPcomplex.html#PolytopalComplex.boundary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyPcomplex.PolytopalComplex.boundary" title="Permalink to this definition">¶</a></dt>
+<dd><p>To compute the boundary of a polytopal d-complex.</p>
+<p>Return the closed (polytopal) boundary (d-1)-complex .</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyPcomplex.PolytopalComplex.chain_complex">
+<tt class="descname">chain_complex</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/chompy/chompyPcomplex.html#PolytopalComplex.chain_complex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyPcomplex.PolytopalComplex.chain_complex" title="Permalink to this definition">¶</a></dt>
+<dd><p>To compute d adjacency matrices that implement the boundary maps.
+Return a list of sparse matrices in CSR (Compressed Sparse Row) format.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyPcomplex.PolytopalComplex.copy">
+<tt class="descname">copy</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/chompy/chompyPcomplex.html#PolytopalComplex.copy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyPcomplex.PolytopalComplex.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>To make a copy of a cellComplex object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyPcomplex.PolytopalComplex.hpolc">
+<tt class="descname">hpolc</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/chompy/chompyPcomplex.html#PolytopalComplex.hpolc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyPcomplex.PolytopalComplex.hpolc" title="Permalink to this definition">¶</a></dt>
+<dd><p>To transform a PolytopalComplex into a Hierarchical
+Polyhedral Complex (HPC).</p>
+<p>Return an object of Hpc class.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyPcomplex.PolytopalComplex.ukpol">
+<tt class="descname">ukpol</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/chompy/chompyPcomplex.html#PolytopalComplex.ukpol"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyPcomplex.PolytopalComplex.ukpol" title="Permalink to this definition">¶</a></dt>
+<dd><p>To the &#8220;UKPOL&#8221; of a simplicial d-complex.</p>
+<p>Return a tuple verts, cells[d].</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyPcomplex.PolytopalComplex.view">
+<tt class="descname">view</tt><big>(</big><em>d=1</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyPcomplex.html#PolytopalComplex.view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyPcomplex.PolytopalComplex.view" title="Permalink to this definition">¶</a></dt>
+<dd><p>To give Plasm a PolytopalComplex to visualize.</p>
+<p>Return &#8216;None&#8217;.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyPcomplex.PolytopalComplex.write">
+<tt class="descname">write</tt><big>(</big><em>file_name</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyPcomplex.html#PolytopalComplex.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyPcomplex.PolytopalComplex.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>To write a &#8216;.psm&#8217; output file, with plasm syntax.</p>
+<p>Return &#8216;None&#8217;.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-chompy.chompyPointSet">
+<span id="chompypointset-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">chompyPointSet</span></tt> Module<a class="headerlink" href="#module-chompy.chompyPointSet" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="chompy.chompyPointSet.PointSet">
+<em class="property">class </em><tt class="descclassname">chompy.chompyPointSet.</tt><tt class="descname">PointSet</tt><big>(</big><em>points</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyPointSet.html#PointSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyPointSet.PointSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">list</span></tt></p>
+<p>The data type to represent a set of points,
+supporting a cell complex.</p>
+<dl class="method">
+<dt id="chompy.chompyPointSet.PointSet.Med">
+<tt class="descname">Med</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/chompy/chompyPointSet.html#PointSet.Med"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyPointSet.PointSet.Med" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyPointSet.PointSet.append">
+<tt class="descname">append</tt><big>(</big><big>)</big><a class="headerlink" href="#chompy.chompyPointSet.PointSet.append" title="Permalink to this definition">¶</a></dt>
+<dd><p>L.append(object) &#8211; append object to end</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyPointSet.PointSet.copy">
+<tt class="descname">copy</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/chompy/chompyPointSet.html#PointSet.copy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyPointSet.PointSet.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>To make a copy of a PointSet object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyPointSet.PointSet.count">
+<tt class="descname">count</tt><big>(</big><em>value</em><big>)</big> &rarr; integer -- return number of occurrences of value<a class="headerlink" href="#chompy.chompyPointSet.PointSet.count" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyPointSet.PointSet.embed">
+<tt class="descname">embed</tt><big>(</big><em>n</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyPointSet.html#PointSet.embed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyPointSet.PointSet.embed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyPointSet.PointSet.extend">
+<tt class="descname">extend</tt><big>(</big><big>)</big><a class="headerlink" href="#chompy.chompyPointSet.PointSet.extend" title="Permalink to this definition">¶</a></dt>
+<dd><p>L.extend(iterable) &#8211; extend list by appending elements from the iterable</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyPointSet.PointSet.index">
+<tt class="descname">index</tt><big>(</big><em>value</em><span class="optional">[</span>, <em>start</em><span class="optional">[</span>, <em>stop</em><span class="optional">]</span><span class="optional">]</span><big>)</big> &rarr; integer -- return first index of value.<a class="headerlink" href="#chompy.chompyPointSet.PointSet.index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raises ValueError if the value is not present.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyPointSet.PointSet.insert">
+<tt class="descname">insert</tt><big>(</big><em>point</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyPointSet.html#PointSet.insert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyPointSet.PointSet.insert" title="Permalink to this definition">¶</a></dt>
+<dd><p>To add a point (if not already present) to a PointSet object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyPointSet.PointSet.max">
+<tt class="descname">max</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/chompy/chompyPointSet.html#PointSet.max"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyPointSet.PointSet.max" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyPointSet.PointSet.min">
+<tt class="descname">min</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/chompy/chompyPointSet.html#PointSet.min"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyPointSet.PointSet.min" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyPointSet.PointSet.normalize">
+<tt class="descname">normalize</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/chompy/chompyPointSet.html#PointSet.normalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyPointSet.PointSet.normalize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyPointSet.PointSet.pop">
+<tt class="descname">pop</tt><big>(</big><span class="optional">[</span><em>index</em><span class="optional">]</span><big>)</big> &rarr; item -- remove and return item at index (default last).<a class="headerlink" href="#chompy.chompyPointSet.PointSet.pop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raises IndexError if list is empty or index is out of range.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyPointSet.PointSet.remove">
+<tt class="descname">remove</tt><big>(</big><big>)</big><a class="headerlink" href="#chompy.chompyPointSet.PointSet.remove" title="Permalink to this definition">¶</a></dt>
+<dd><p>L.remove(value) &#8211; remove first occurrence of value.
+Raises ValueError if the value is not present.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyPointSet.PointSet.reverse">
+<tt class="descname">reverse</tt><big>(</big><big>)</big><a class="headerlink" href="#chompy.chompyPointSet.PointSet.reverse" title="Permalink to this definition">¶</a></dt>
+<dd><p>L.reverse() &#8211; reverse <em>IN PLACE</em></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyPointSet.PointSet.rotate">
+<tt class="descname">rotate</tt><big>(</big><em>axis1</em>, <em>axis2</em>, <em>angle</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyPointSet.html#PointSet.rotate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyPointSet.PointSet.rotate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyPointSet.PointSet.scale">
+<tt class="descname">scale</tt><big>(</big><em>vect</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyPointSet.html#PointSet.scale"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyPointSet.PointSet.scale" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyPointSet.PointSet.sort">
+<tt class="descname">sort</tt><big>(</big><big>)</big><a class="headerlink" href="#chompy.chompyPointSet.PointSet.sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>L.sort(cmp=None, key=None, reverse=False) &#8211; stable sort <em>IN PLACE</em>;
+cmp(x, y) -&gt; -1, 0, 1</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyPointSet.PointSet.translate">
+<tt class="descname">translate</tt><big>(</big><em>vect</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyPointSet.html#PointSet.translate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyPointSet.PointSet.translate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyPointSet.PointSet.update">
+<tt class="descname">update</tt><big>(</big><em>modify</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyPointSet.html#PointSet.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyPointSet.PointSet.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>To update a PointSet object without change the element ordering.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyPointSet.complex2surface">
+<tt class="descclassname">chompy.chompyPointSet.</tt><tt class="descname">complex2surface</tt><big>(</big><em>obj</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyPointSet.html#complex2surface"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyPointSet.complex2surface" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transforms the 2-skeleton of a simplicial complex in
+a triangulated surface.</p>
+<p>Return a list of triples of surface vertices (nD points).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyPointSet.embed">
+<tt class="descclassname">chompy.chompyPointSet.</tt><tt class="descname">embed</tt><big>(</big><em>pointset</em>, <em>n</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyPointSet.html#embed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyPointSet.embed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyPointSet.extrude">
+<tt class="descclassname">chompy.chompyPointSet.</tt><tt class="descname">extrude</tt><big>(</big><em>cells</em>, <em>hlist</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyPointSet.html#extrude"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyPointSet.extrude" title="Permalink to this definition">¶</a></dt>
+<dd><p>To complute the multiple linear extrusion of a d-complex.
+Map R^d -&gt; R^(d+1), according to: Ferrucci &amp; Paoluzzi, CAD 1991.
+&#8216;cells&#8217; is a simplicial complex, given as a list of lists;
+&#8216;hlist&#8217; is a list of heights in the added dimension.</p>
+<p>Return the (d+1)-dimensional simplicial complex.
+Only the 0- and (d+1)- skeletons are computed.
+In order to get the remaining skeletons, the &#8216;cell-complex&#8217; function
+must be invoked.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyPointSet.pfacets">
+<tt class="descclassname">chompy.chompyPointSet.</tt><tt class="descname">pfacets</tt><big>(</big><em>pcomplex</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyPointSet.html#pfacets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyPointSet.pfacets" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyPointSet.shift">
+<tt class="descclassname">chompy.chompyPointSet.</tt><tt class="descname">shift</tt><big>(</big><em>n</em>, <em>listoflists</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyPointSet.html#shift"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyPointSet.shift" title="Permalink to this definition">¶</a></dt>
+<dd><p>To increment by (int) &#8216;n&#8217; all the (int) elements of a list of lists.</p>
+<p>Returns a list of lists of int.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyPointSet.subcomplex">
+<tt class="descclassname">chompy.chompyPointSet.</tt><tt class="descname">subcomplex</tt><big>(</big><em>d</em>, <em>List</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyPointSet.html#subcomplex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyPointSet.subcomplex" title="Permalink to this definition">¶</a></dt>
+<dd><p>To compute the list of adjacent d-tuples obtained by shifting the
+list List by one element.</p>
+<p>Return the list of n d-lists, with n = len(List)-d+1</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-chompy.chompyScomplex">
+<span id="chompyscomplex-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">chompyScomplex</span></tt> Module<a class="headerlink" href="#module-chompy.chompyScomplex" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="chompy.chompyScomplex.Map">
+<tt class="descclassname">chompy.chompyScomplex.</tt><tt class="descname">Map</tt><big>(</big><em>mapping</em>, <em>pol</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyScomplex.html#Map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyScomplex.Map" title="Permalink to this definition">¶</a></dt>
+<dd><p>To Apply the &#8220;mappping&#8221; to the vertices of the SimplicialComplex pol.</p>
+<p>Be careful to write &#8220;Map&#8221;, with the first letter in Upper case.
+Return a new SimplicialComplex.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="chompy.chompyScomplex.SimplicialComplex">
+<em class="property">class </em><tt class="descclassname">chompy.chompyScomplex.</tt><tt class="descname">SimplicialComplex</tt><big>(</big><em>vertices</em>, <em>d_simplices</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyScomplex.html#SimplicialComplex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyScomplex.SimplicialComplex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#chompy.chompyPcomplex.PolytopalComplex" title="chompy.chompyPcomplex.PolytopalComplex"><tt class="xref py py-class docutils literal"><span class="pre">chompy.chompyPcomplex.PolytopalComplex</span></tt></a></p>
+<p>The data type to represent a simplicial complex.</p>
+<p>The SimplicialComplex is a dimension-independent ADT (Abstract Data Type),
+characterized by an <cite>intrinsic</cite> and an <cite>embedding dimension</cite>, a set of <cite>vertices</cite>,
+and sets of <cite>cells</cite> (of various dimensions), given as lists of vertex indices.</p>
+<p>The constructor returns an <strong>object</strong> of the class.</p>
+<dl class="method">
+<dt id="chompy.chompyScomplex.SimplicialComplex.II">
+<tt class="descname">II</tt><big>(</big><em>alpha</em>, <em>beta</em>, <em>gamma</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyScomplex.html#SimplicialComplex.II"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyScomplex.SimplicialComplex.II" title="Permalink to this definition">¶</a></dt>
+<dd><p>To compute surface integrals of a three-variate monomial on the complex boundary.</p>
+<p>Return a number.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyScomplex.SimplicialComplex.III">
+<tt class="descname">III</tt><big>(</big><em>alpha</em>, <em>beta</em>, <em>gamma</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyScomplex.html#SimplicialComplex.III"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyScomplex.SimplicialComplex.III" title="Permalink to this definition">¶</a></dt>
+<dd><p>To compute volume integrals of a three-variate monomial on the complex boundary.</p>
+<p>Return a number.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyScomplex.SimplicialComplex.add">
+<tt class="descname">add</tt><big>(</big><em>scomplex</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyScomplex.html#SimplicialComplex.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyScomplex.SimplicialComplex.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>To compute the addition of d-cells of &#8216;scomplex&#8217; to self. &#8216;scomplex&#8217;
+must be a subcomplex of self.</p>
+<p>Return a new subcomplex of self.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyScomplex.SimplicialComplex.boundary">
+<tt class="descname">boundary</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/chompy/chompyScomplex.html#SimplicialComplex.boundary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyScomplex.SimplicialComplex.boundary" title="Permalink to this definition">¶</a></dt>
+<dd><p>To compute the boundary of a simplicial d-complex.</p>
+<p>Return the closed (d-1)-complex triangulating the boundary of the input complex.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyScomplex.SimplicialComplex.chain_complex">
+<tt class="descname">chain_complex</tt><big>(</big><big>)</big><a class="headerlink" href="#chompy.chompyScomplex.SimplicialComplex.chain_complex" title="Permalink to this definition">¶</a></dt>
+<dd><p>To compute d adjacency matrices that implement the boundary maps.
+Return a list of sparse matrices in CSR (Compressed Sparse Row) format.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyScomplex.SimplicialComplex.copy">
+<tt class="descname">copy</tt><big>(</big><big>)</big><a class="headerlink" href="#chompy.chompyScomplex.SimplicialComplex.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>To make a copy of a cellComplex object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyScomplex.SimplicialComplex.extrude">
+<tt class="descname">extrude</tt><big>(</big><em>hlist</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyScomplex.html#SimplicialComplex.extrude"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyScomplex.SimplicialComplex.extrude" title="Permalink to this definition">¶</a></dt>
+<dd><p>To complute the multiple linear extrusion of a d-complex.
+Map R^d -&gt; R^(d+1), according to: Ferrucci &amp; Paoluzzi, CAD 1991.
+&#8216;cells&#8217; is a simplicial complex, given as a list of lists;
+&#8216;hlist&#8217; is a list of heights in the added dimension.</p>
+<p>Return the (d+1)-dimensional simplicial complex.
+Only the 0- and (d+1)- skeletons are computed.
+In order to get the remaining skeletons, the &#8216;cell-complex&#8217; function
+must be invoked.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyScomplex.SimplicialComplex.hpolc">
+<tt class="descname">hpolc</tt><big>(</big><big>)</big><a class="headerlink" href="#chompy.chompyScomplex.SimplicialComplex.hpolc" title="Permalink to this definition">¶</a></dt>
+<dd><p>To transform a PolytopalComplex into a Hierarchical
+Polyhedral Complex (HPC).</p>
+<p>Return an object of Hpc class.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyScomplex.SimplicialComplex.multires">
+<tt class="descname">multires</tt><big>(</big><em>C2</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyScomplex.html#SimplicialComplex.multires"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyScomplex.SimplicialComplex.multires" title="Permalink to this definition">¶</a></dt>
+<dd><p>To compute a multiresolution cellcomplex generated by embedding
+the C2 cellcomplex within self.
+C2 must be a SUBCOMPLEX of self.</p>
+<p>Return a new SimplicialComplex.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyScomplex.SimplicialComplex.normalize">
+<tt class="descname">normalize</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/chompy/chompyScomplex.html#SimplicialComplex.normalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyScomplex.SimplicialComplex.normalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>To map the SimplicialComplex so that its containment box is mapped to the
+standard unit cube.</p>
+<p>Return a new subcomplex of self.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyScomplex.SimplicialComplex.offspring">
+<tt class="descname">offspring</tt><big>(</big><em>germs</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyScomplex.html#SimplicialComplex.offspring"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyScomplex.SimplicialComplex.offspring" title="Permalink to this definition">¶</a></dt>
+<dd><p>To compute a subcomplex of self, with d-cells incident on some 0-cell
+in the list of face lists &#8216;germs&#8217;.</p>
+<p>Return a new cellComplex with the 0-cells of self and a subset of d-cells.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyScomplex.SimplicialComplex.rotate">
+<tt class="descname">rotate</tt><big>(</big><em>axis1</em>, <em>axis2</em>, <em>angle</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyScomplex.html#SimplicialComplex.rotate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyScomplex.SimplicialComplex.rotate" title="Permalink to this definition">¶</a></dt>
+<dd><p>To rotate the SimplicialComplex by the &#8216;angle&#8217; as side effect.
+The changed coords are &#8216;axis1&#8217;, &#8216;axis2&#8217;</p>
+<p>Return self.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyScomplex.SimplicialComplex.scale">
+<tt class="descname">scale</tt><big>(</big><em>vect</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyScomplex.html#SimplicialComplex.scale"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyScomplex.SimplicialComplex.scale" title="Permalink to this definition">¶</a></dt>
+<dd><p>To scale the SimplicialComplex by the vect as side effect.</p>
+<p>Return self.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyScomplex.SimplicialComplex.split">
+<tt class="descname">split</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/chompy/chompyScomplex.html#SimplicialComplex.split"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyScomplex.SimplicialComplex.split" title="Permalink to this definition">¶</a></dt>
+<dd><p>To compute the baricentric decomposition of a d-dimensional
+obj SimplicialComplex.</p>
+<p>Return a simplicial SimplicialComplex object with k_d * (d+1)! d-cells, where
+k_d is the cardinality of the d-skeleton of obj.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyScomplex.SimplicialComplex.subtract">
+<tt class="descname">subtract</tt><big>(</big><em>scomplex</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyScomplex.html#SimplicialComplex.subtract"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyScomplex.SimplicialComplex.subtract" title="Permalink to this definition">¶</a></dt>
+<dd><p>To compute the subtraction of d-cells of &#8216;scomplex&#8217; from self. &#8216;scomplex&#8217;
+must be a subcomplex of self.</p>
+<p>Return a new subcomplex of self.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyScomplex.SimplicialComplex.translate">
+<tt class="descname">translate</tt><big>(</big><em>vect</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyScomplex.html#SimplicialComplex.translate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyScomplex.SimplicialComplex.translate" title="Permalink to this definition">¶</a></dt>
+<dd><p>To translate the SimplicialComplex by the vect as side effect.</p>
+<p>Return self.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyScomplex.SimplicialComplex.trivial_split">
+<tt class="descname">trivial_split</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/chompy/chompyScomplex.html#SimplicialComplex.trivial_split"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyScomplex.SimplicialComplex.trivial_split" title="Permalink to this definition">¶</a></dt>
+<dd><p>To compute the baricentric decomposition of a d-dimensional
+obj SimplicialComplex.</p>
+<p>Return a simplicial SimplicialComplex object with k_d * (d+1)! d-cells, where
+k_d is the cardinality of the d-skeleton of obj.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyScomplex.SimplicialComplex.ukpol">
+<tt class="descname">ukpol</tt><big>(</big><big>)</big><a class="headerlink" href="#chompy.chompyScomplex.SimplicialComplex.ukpol" title="Permalink to this definition">¶</a></dt>
+<dd><p>To the &#8220;UKPOL&#8221; of a simplicial d-complex.</p>
+<p>Return a tuple verts, cells[d].</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyScomplex.SimplicialComplex.view">
+<tt class="descname">view</tt><big>(</big><em>d=1</em><big>)</big><a class="headerlink" href="#chompy.chompyScomplex.SimplicialComplex.view" title="Permalink to this definition">¶</a></dt>
+<dd><p>To give Plasm a PolytopalComplex to visualize.</p>
+<p>Return &#8216;None&#8217;.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="chompy.chompyScomplex.SimplicialComplex.write">
+<tt class="descname">write</tt><big>(</big><em>file_name</em><big>)</big><a class="headerlink" href="#chompy.chompyScomplex.SimplicialComplex.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>To write a &#8216;.psm&#8217; output file, with plasm syntax.</p>
+<p>Return &#8216;None&#8217;.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyScomplex.cells">
+<tt class="descclassname">chompy.chompyScomplex.</tt><tt class="descname">cells</tt><big>(</big><em>batches, cellpoints, expl=[1, 1, 1]</em><big>)</big><a class="headerlink" href="#chompy.chompyScomplex.cells" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyScomplex.chain_complex">
+<tt class="descclassname">chompy.chompyScomplex.</tt><tt class="descname">chain_complex</tt><big>(</big><em>obj</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyScomplex.html#chain_complex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyScomplex.chain_complex" title="Permalink to this definition">¶</a></dt>
+<dd><p>To compute d adjacency matrices that implement the boundary maps.</p>
+<p>Return a list of sparse matrices in CSR (Compressed Sparse Row) format.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyScomplex.complex_read">
+<tt class="descclassname">chompy.chompyScomplex.</tt><tt class="descname">complex_read</tt><big>(</big><em>file_name</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyScomplex.html#complex_read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyScomplex.complex_read" title="Permalink to this definition">¶</a></dt>
+<dd><p>To read a &#8216;.dat&#8217; input file, with CSV syntax.
+Each cell is read from a single line.</p>
+<p>Return the complex as a list of lists &#8216;cells&#8217; of simplices.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyScomplex.cylinders">
+<tt class="descclassname">chompy.chompyScomplex.</tt><tt class="descname">cylinders</tt><big>(</big><em>batches, edgepoints, expl=[1, 1, 1]</em><big>)</big><a class="headerlink" href="#chompy.chompyScomplex.cylinders" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyScomplex.draw">
+<tt class="descclassname">chompy.chompyScomplex.</tt><tt class="descname">draw</tt><big>(</big><em>c, chains=[[], [], [], []], expl=[1, 1, 1]</em><big>)</big><a class="headerlink" href="#chompy.chompyScomplex.draw" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyScomplex.grid">
+<tt class="descclassname">chompy.chompyScomplex.</tt><tt class="descname">grid</tt><big>(</big><em>listofquotes</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyScomplex.html#grid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyScomplex.grid" title="Permalink to this definition">¶</a></dt>
+<dd><p>To generate a grid of d-simplices.</p>
+<p>Return the complex as a &#8216;cells&#8217; list of lists  of simplices.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyScomplex.merge_complex">
+<tt class="descclassname">chompy.chompyScomplex.</tt><tt class="descname">merge_complex</tt><big>(</big><em>c1</em>, <em>c2</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyScomplex.html#merge_complex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyScomplex.merge_complex" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyScomplex.offset">
+<tt class="descclassname">chompy.chompyScomplex.</tt><tt class="descname">offset</tt><big>(</big><em>point, expl=[1, 1, 1]</em><big>)</big><a class="headerlink" href="#chompy.chompyScomplex.offset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyScomplex.planecells">
+<tt class="descclassname">chompy.chompyScomplex.</tt><tt class="descname">planecells</tt><big>(</big><em>batches, facepoints, expl=[1, 1, 1]</em><big>)</big><a class="headerlink" href="#chompy.chompyScomplex.planecells" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyScomplex.remap">
+<tt class="descclassname">chompy.chompyScomplex.</tt><tt class="descname">remap</tt><big>(</big><em>points</em><big>)</big><a class="headerlink" href="#chompy.chompyScomplex.remap" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyScomplex.spheres">
+<tt class="descclassname">chompy.chompyScomplex.</tt><tt class="descname">spheres</tt><big>(</big><em>batches, points, expl=[1, 1, 1]</em><big>)</big><a class="headerlink" href="#chompy.chompyScomplex.spheres" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyScomplex.transfCylr">
+<tt class="descclassname">chompy.chompyScomplex.</tt><tt class="descname">transfCylr</tt><big>(</big><em>batchCylinder, pointpair, expl=[1, 1, 1]</em><big>)</big><a class="headerlink" href="#chompy.chompyScomplex.transfCylr" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-chompy.chompyUtil">
+<span id="chompyutil-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">chompyUtil</span></tt> Module<a class="headerlink" href="#module-chompy.chompyUtil" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="chompy.chompyUtil.cell_complex">
+<tt class="descclassname">chompy.chompyUtil.</tt><tt class="descname">cell_complex</tt><big>(</big><em>cells</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyUtil.html#cell_complex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyUtil.cell_complex" title="Permalink to this definition">¶</a></dt>
+<dd><p>To compute and store all the skeletons of a cell complex.
+The input data structure is only required to contain the 0- and the
+highest dimensional skeletons (0- and n-, with dim == n)</p>
+<p>Return the (possibly upgraded) list of lists of k-dimensional cells,
+with 0 &lt;= k &lt;= dim.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyUtil.code">
+<tt class="descclassname">chompy.chompyUtil.</tt><tt class="descname">code</tt><big>(</big><em>vect</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyUtil.html#code"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyUtil.code" title="Permalink to this definition">¶</a></dt>
+<dd><p>To generate a string representation of a number array.</p>
+<p>Used to generate the vertex keys in PointSet dictionary, and other similar operations.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyUtil.dimension">
+<tt class="descclassname">chompy.chompyUtil.</tt><tt class="descname">dimension</tt><big>(</big><em>cells</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyUtil.html#dimension"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyUtil.dimension" title="Permalink to this definition">¶</a></dt>
+<dd><p>To compute the (intrinsic) dimension of a cell complex.</p>
+<p>Return the last non zero cardinality of k-skeletons, with
+k &lt;= dim.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyUtil.evalprint__">
+<tt class="descclassname">chompy.chompyUtil.</tt><tt class="descname">evalprint__</tt><big>(</big><em>string</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyUtil.html#evalprint__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyUtil.evalprint__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simple tool to evaluate a language expression passed as a string.</p>
+<p>Side effect: print the string and its value.
+Return <tt class="docutils literal"><span class="pre">None</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyUtil.facets">
+<tt class="descclassname">chompy.chompyUtil.</tt><tt class="descname">facets</tt><big>(</big><em>cell</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyUtil.html#facets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyUtil.facets" title="Permalink to this definition">¶</a></dt>
+<dd><p>To compute the (non oriented) boundary of a d-simplex.
+Uses the standard method of algebraic topology:
+elimination of a vertex index to generate every face.
+Both the simplex and its facets are represented as an ordered list of vertices.</p>
+<p>Return a list of facets, i.e. of (d-1)-dimensional simplexes.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyUtil.fixedPrec">
+<tt class="descclassname">chompy.chompyUtil.</tt><tt class="descname">fixedPrec</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyUtil.html#fixedPrec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyUtil.fixedPrec" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyUtil.homology_maps">
+<tt class="descclassname">chompy.chompyUtil.</tt><tt class="descname">homology_maps</tt><big>(</big><em>dictos</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyUtil.html#homology_maps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyUtil.homology_maps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the homology map of a (simplicial) cell complex.
+The map is given as d+1 lists (4 lists in this prototype implementation)
+[b_0, b_1, b_2, b_3] corresponding to the boundary operators</p>
+<p>b_d: K_d -&gt; K_(d-1).  Notice that b_0 == [] by definition.
+Each map is given as an (ordered) list of pairs.</p>
+<p>Return a list of lists of pairs (tuples) of positive integer indices.
+The first element is the index of a d-cell; the second element is the
+index of an incident (d-1)-facet.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyUtil.ispair">
+<tt class="descclassname">chompy.chompyUtil.</tt><tt class="descname">ispair</tt><big>(</big><em>arg</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyUtil.html#ispair"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyUtil.ispair" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyUtil.issingleton">
+<tt class="descclassname">chompy.chompyUtil.</tt><tt class="descname">issingleton</tt><big>(</big><em>arg</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyUtil.html#issingleton"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyUtil.issingleton" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyUtil.mktables">
+<tt class="descclassname">chompy.chompyUtil.</tt><tt class="descname">mktables</tt><big>(</big><em>Complex</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyUtil.html#mktables"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyUtil.mktables" title="Permalink to this definition">¶</a></dt>
+<dd><p>To build the cell database of a cell complex.</p>
+<p>Return a list of d+1 dictionaries, where d is the dimension of the complex.
+Key is the &#8216;repr&#8217; of the cells; values are integers in range(0,k[d]) where
+k[d] is the cardinality of the d-skeleton.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyUtil.myprint">
+<tt class="descclassname">chompy.chompyUtil.</tt><tt class="descname">myprint</tt><big>(</big><em>arg1</em>, <em>arg2</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyUtil.html#myprint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyUtil.myprint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyUtil.prepKey">
+<tt class="descclassname">chompy.chompyUtil.</tt><tt class="descname">prepKey</tt><big>(</big><em>args</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyUtil.html#prepKey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyUtil.prepKey" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyUtil.printer">
+<tt class="descclassname">chompy.chompyUtil.</tt><tt class="descname">printer</tt><big>(</big><em>args</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyUtil.html#printer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyUtil.printer" title="Permalink to this definition">¶</a></dt>
+<dd><p>To make an &#8216;internal printing&#8217; of a (possibly nested) list in plasm format.</p>
+<p>Return a string, with squaare brackets substituted by angle brackets</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyUtil.progressive_sum">
+<tt class="descclassname">chompy.chompyUtil.</tt><tt class="descname">progressive_sum</tt><big>(</big><em>List</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyUtil.html#progressive_sum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyUtil.progressive_sum" title="Permalink to this definition">¶</a></dt>
+<dd><p>To compute the coordinates associated to a list of (Num) differences.
+Starting from zero.</p>
+<p>Return a list of Num</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyUtil.remove_duplicates">
+<tt class="descclassname">chompy.chompyUtil.</tt><tt class="descname">remove_duplicates</tt><big>(</big><em>hasDupes</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyUtil.html#remove_duplicates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyUtil.remove_duplicates" title="Permalink to this definition">¶</a></dt>
+<dd><p>To remove the duplicates from a list of cells.
+Consider as duplicate the cell with opposite orientation (using the
+canonical representation)
+The mapping on a dictionary is used, with key the repr of the elements.</p>
+<p>Returns a new list without duplicates.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyUtil.round_or_zero">
+<tt class="descclassname">chompy.chompyUtil.</tt><tt class="descname">round_or_zero</tt><big>(</big><em>x</em>, <em>prec=6</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyUtil.html#round_or_zero"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyUtil.round_or_zero" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decision procedure to approximate a small number to zero.</p>
+<p>Return either the input number or zero.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyUtil.skeleton">
+<tt class="descclassname">chompy.chompyUtil.</tt><tt class="descname">skeleton</tt><big>(</big><em>h</em>, <em>cells</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyUtil.html#skeleton"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyUtil.skeleton" title="Permalink to this definition">¶</a></dt>
+<dd><p>To compute the h-skeleton of a complex (given as a list of lists of &#8216;cells&#8217;).</p>
+<p>Return the list of h-cells, without duplicates.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="chompy.chompyUtil.traversal">
+<tt class="descclassname">chompy.chompyUtil.</tt><tt class="descname">traversal</tt><big>(</big><em>tree</em>, <em>path</em>, <em>store</em><big>)</big><a class="reference internal" href="_modules/chompy/chompyUtil.html#traversal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.chompyUtil.traversal" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-chompy.generate_modules">
+<span id="generate-modules-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">generate_modules</span></tt> Module<a class="headerlink" href="#module-chompy.generate_modules" title="Permalink to this headline">¶</a></h2>
+<p>sphinx-autopackage-script</p>
+<p>This script parses a directory tree looking for python modules and packages and
+creates ReST files appropriately to create code documentation with Sphinx.
+It also creates a modules index (named modules.&lt;suffix&gt;).</p>
+<dl class="function">
+<dt id="chompy.generate_modules.create_module_file">
+<tt class="descclassname">chompy.generate_modules.</tt><tt class="descname">create_module_file</tt><big>(</big><em>package</em>, <em>module</em>, <em>opts</em><big>)</big><a class="reference internal" href="_modules/chompy/generate_modules.html#create_module_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.generate_modules.create_module_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build the text of the file and write the file.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="chompy.generate_modules.create_modules_toc_file">
+<tt class="descclassname">chompy.generate_modules.</tt><tt class="descname">create_modules_toc_file</tt><big>(</big><em>master_package</em>, <em>modules</em>, <em>opts</em>, <em>name='modules'</em><big>)</big><a class="reference internal" href="_modules/chompy/generate_modules.html#create_modules_toc_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.generate_modules.create_modules_toc_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the module&#8217;s index.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="chompy.generate_modules.create_package_file">
+<tt class="descclassname">chompy.generate_modules.</tt><tt class="descname">create_package_file</tt><big>(</big><em>root</em>, <em>master_package</em>, <em>subroot</em>, <em>py_files</em>, <em>opts</em>, <em>subs</em><big>)</big><a class="reference internal" href="_modules/chompy/generate_modules.html#create_package_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.generate_modules.create_package_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build the text of the file and write the file.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="chompy.generate_modules.format_directive">
+<tt class="descclassname">chompy.generate_modules.</tt><tt class="descname">format_directive</tt><big>(</big><em>module</em>, <em>package=None</em><big>)</big><a class="reference internal" href="_modules/chompy/generate_modules.html#format_directive"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.generate_modules.format_directive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the automodule directive and add the options.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="chompy.generate_modules.format_heading">
+<tt class="descclassname">chompy.generate_modules.</tt><tt class="descname">format_heading</tt><big>(</big><em>level</em>, <em>text</em><big>)</big><a class="reference internal" href="_modules/chompy/generate_modules.html#format_heading"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.generate_modules.format_heading" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a heading of &lt;level&gt; [1, 2 or 3 supported].</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="chompy.generate_modules.is_excluded">
+<tt class="descclassname">chompy.generate_modules.</tt><tt class="descname">is_excluded</tt><big>(</big><em>root</em>, <em>excludes</em><big>)</big><a class="reference internal" href="_modules/chompy/generate_modules.html#is_excluded"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.generate_modules.is_excluded" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the directory is in the exclude list.</p>
+<dl class="docutils">
+<dt>Note: by having trailing slashes, we avoid common prefix issues, like</dt>
+<dd>e.g. an exlude &#8220;foo&#8221; also accidentally excluding &#8220;foobar&#8221;.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="chompy.generate_modules.main">
+<tt class="descclassname">chompy.generate_modules.</tt><tt class="descname">main</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/chompy/generate_modules.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.generate_modules.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse and check the command line arguments.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="chompy.generate_modules.makename">
+<tt class="descclassname">chompy.generate_modules.</tt><tt class="descname">makename</tt><big>(</big><em>package</em>, <em>module</em><big>)</big><a class="reference internal" href="_modules/chompy/generate_modules.html#makename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.generate_modules.makename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Join package and module with a dot.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="chompy.generate_modules.normalize_excludes">
+<tt class="descclassname">chompy.generate_modules.</tt><tt class="descname">normalize_excludes</tt><big>(</big><em>rootpath</em>, <em>excludes</em><big>)</big><a class="reference internal" href="_modules/chompy/generate_modules.html#normalize_excludes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.generate_modules.normalize_excludes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normalize the excluded directory list:
+* must be either an absolute path or start with rootpath,
+* otherwise it is joined with rootpath
+* with trailing slash</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="chompy.generate_modules.recurse_tree">
+<tt class="descclassname">chompy.generate_modules.</tt><tt class="descname">recurse_tree</tt><big>(</big><em>path</em>, <em>excludes</em>, <em>opts</em><big>)</big><a class="reference internal" href="_modules/chompy/generate_modules.html#recurse_tree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.generate_modules.recurse_tree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Look for every file in the directory tree and create the corresponding
+ReST files.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="chompy.generate_modules.shall_skip">
+<tt class="descclassname">chompy.generate_modules.</tt><tt class="descname">shall_skip</tt><big>(</big><em>module</em><big>)</big><a class="reference internal" href="_modules/chompy/generate_modules.html#shall_skip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.generate_modules.shall_skip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if we want to skip this module.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="chompy.generate_modules.write_file">
+<tt class="descclassname">chompy.generate_modules.</tt><tt class="descname">write_file</tt><big>(</big><em>name</em>, <em>text</em>, <em>opts</em><big>)</big><a class="reference internal" href="_modules/chompy/generate_modules.html#write_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chompy.generate_modules.write_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the output file for module/package &lt;name&gt;.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">chompy Package</a><ul>
+<li><a class="reference internal" href="#module-chompy.chompyCcomplex"><tt class="docutils literal"><span class="pre">chompyCcomplex</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-chompy.chompyDcomplex"><tt class="docutils literal"><span class="pre">chompyDcomplex</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-chompy.chompyIntegr"><tt class="docutils literal"><span class="pre">chompyIntegr</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-chompy.chompyPcomplex"><tt class="docutils literal"><span class="pre">chompyPcomplex</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-chompy.chompyPointSet"><tt class="docutils literal"><span class="pre">chompyPointSet</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-chompy.chompyScomplex"><tt class="docutils literal"><span class="pre">chompyScomplex</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-chompy.chompyUtil"><tt class="docutils literal"><span class="pre">chompyUtil</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-chompy.generate_modules"><tt class="docutils literal"><span class="pre">generate_modules</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="modules.html"
+                        title="previous chapter">Project Modules</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/chompy.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="Project Modules"
+             >previous</a> |</li>
+        <li><a href="index.html">Chompy 0.1 documentation</a> &raquo;</li>
+          <li><a href="modules.html" >Project Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, DIA -- Roma Tre University.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.
+    </div>
+  </body>
+</html>

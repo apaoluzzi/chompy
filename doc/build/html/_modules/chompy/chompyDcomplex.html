@@ -1,0 +1,260 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>chompy.chompyDcomplex &mdash; Chompy 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Chompy 0.1 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">Chompy 0.1 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for chompy.chompyDcomplex</h1><div class="highlight"><pre>
+<span class="c">## This file provides a library for polytopal and simplicial complexes.</span>
+<span class="c">## Includes input, output, skeleton and boundary evaluation, linear</span>
+<span class="c">## extrusion, boundary and coboundary operators, and linear combination</span>
+<span class="c">## of chains.</span>
+<span class="c">## Author: Alberto Paoluzzi (paoluzzi@dia.uniroma3.it)</span>
+<span class="c">## Copyright (C) 2009,2010 Dipartimento Informatica e Automazione,</span>
+<span class="c">## Università Roma Tre, Rome, Italy.</span>
+
+<span class="c">## This library is free software; you can redistribute it and/or</span>
+<span class="c">## modify it under the terms of the GNU Lesser General Public</span>
+<span class="c">## License as published by the Free Software Foundation; either</span>
+<span class="c">## version 2.1 of the License, or (at your option) any later version.</span>
+
+<span class="c">## This library is distributed in the hope that it will be useful,</span>
+<span class="c">## but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c">## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU</span>
+<span class="c">## Lesser General Public License for more details.</span>
+
+<span class="c">## You should have received a copy of the GNU Lesser General Public</span>
+<span class="c">## License along with this library; if not, write to the Free Software</span>
+<span class="c">## Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA</span>
+
+<span class="kn">from</span> <span class="nn">chompyCcomplex</span> <span class="kn">import</span> <span class="o">*</span>
+
+
+<span class="c">#########################################################</span>
+<div class="viewcode-block" id="CovertexSet"><a class="viewcode-back" href="../../chompy.html#chompy.chompyDcomplex.CovertexSet">[docs]</a><span class="k">class</span> <span class="nc">CovertexSet</span><span class="p">(</span><span class="n">PointSet</span><span class="p">):</span>  
+<span class="c">#########################################################</span>
+    <span class="sd">&quot;&quot;&quot; The data type to represent a set of points,</span>
+<span class="sd">        supporting a cell complex. &quot;&quot;&quot;</span>
+
+
+    <span class="c">## -- __init__ Method -------------------------------</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coverts</span><span class="p">):</span>
+                            
+        <span class="bp">self</span><span class="o">.</span><span class="n">dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="n">coverts</span> <span class="o">=</span> <span class="p">[</span> <span class="n">AA</span><span class="p">(</span><span class="nb">float</span><span class="p">)(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">coverts</span> <span class="p">]</span>
+        <span class="n">coverts</span> <span class="o">=</span> <span class="p">[</span> <span class="n">AA</span><span class="p">(</span><span class="n">round_or_zero</span><span class="p">)(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">coverts</span> <span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">coverts</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">coverts</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                <span class="n">coverts</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">SCALARVECTPROD</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">coverts</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">coverts</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">code</span><span class="p">(</span><span class="n">coverts</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict</span><span class="p">:</span>
+                <span class="n">k</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">operator</span><span class="o">.</span><span class="n">setitem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dict</span><span class="p">,</span><span class="n">code</span><span class="p">(</span><span class="n">coverts</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">k</span><span class="p">)</span>
+                
+        <span class="bp">self</span><span class="o">.</span><span class="n">ind</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">([[</span><span class="n">v</span><span class="p">,</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict</span><span class="o">.</span><span class="n">items</span><span class="p">()])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">points</span> <span class="o">=</span> <span class="p">[</span><span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ind</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dict</span><span class="p">))]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dict</span><span class="p">)</span>
+
+
+<span class="c">#########################################################</span></div>
+<div class="viewcode-block" id="CofaceComplex"><a class="viewcode-back" href="../../chompy.html#chompy.chompyDcomplex.CofaceComplex">[docs]</a><span class="k">class</span> <span class="nc">CofaceComplex</span><span class="p">(</span><span class="n">PolytopalComplex</span><span class="p">):</span>  
+<span class="c">#########################################################</span>
+
+            
+    <span class="c">## -- __init__ Method -------------------------------</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coverts</span><span class="p">,</span><span class="n">cocells</span><span class="o">=</span><span class="p">[],</span><span class="n">dim</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+
+        <span class="k">def</span> <span class="nf">convert</span><span class="p">(</span><span class="n">coverts</span><span class="p">,</span> <span class="n">cocells</span><span class="p">):</span>
+            <span class="n">cocells</span> <span class="o">=</span> <span class="p">[[</span> <span class="n">coverts</span><span class="p">[</span><span class="n">f</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">cocell</span><span class="p">]</span> <span class="k">for</span> <span class="n">cocell</span> <span class="ow">in</span> <span class="n">cocells</span><span class="p">]</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cocells</span><span class="p">)):</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cocells</span><span class="p">[</span><span class="n">k</span><span class="p">])):</span>
+                    <span class="k">if</span> <span class="n">cocells</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                        <span class="n">cocells</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">SCALARVECTPROD</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">cocells</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">j</span><span class="p">]])</span>
+                <span class="n">out</span> <span class="o">+=</span> <span class="p">[[</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">dict</span><span class="p">[</span><span class="n">code</span><span class="p">(</span><span class="n">p</span><span class="p">)]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">cocells</span><span class="p">[</span><span class="n">k</span><span class="p">]]]</span>
+            <span class="k">return</span> <span class="n">out</span>
+
+        <span class="k">def</span> <span class="nf">pack</span><span class="p">(</span><span class="n">cofaces</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">AA</span><span class="p">(</span><span class="nb">eval</span><span class="p">)(</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">AA</span><span class="p">(</span><span class="nb">repr</span><span class="p">)(</span><span class="n">cofaces</span><span class="p">))))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span> <span class="o">=</span> <span class="n">CovertexSet</span><span class="p">(</span><span class="n">coverts</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">=</span> <span class="n">dim</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rn</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">coverts</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">cells</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">[[]]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">dict</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">cells</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">convert</span><span class="p">(</span><span class="n">coverts</span><span class="p">,</span> <span class="n">cocells</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cells</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">[[</span><span class="n">f</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">ind</span><span class="p">]</span>
+                        
+
+
+<span class="c">#########################################################</span></div>
+<div class="viewcode-block" id="DualComplex"><a class="viewcode-back" href="../../chompy.html#chompy.chompyDcomplex.DualComplex">[docs]</a><span class="k">class</span> <span class="nc">DualComplex</span><span class="p">(</span><span class="n">PolytopalComplex</span><span class="p">):</span>  
+<span class="c">#########################################################</span>
+    <span class="sd">&quot;&quot;&quot; Input: a hierarchical polyhedral complex (HPC data structure) &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="DualComplex.pointMembership"><a class="viewcode-back" href="../../chompy.html#chompy.chompyDcomplex.DualComplex.pointMembership">[docs]</a>    <span class="k">def</span> <span class="nf">pointMembership</span> <span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">coface</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">INNERPROD</span><span class="p">([[</span><span class="mf">1.0</span><span class="p">]</span><span class="o">+</span><span class="n">p</span><span class="p">,</span><span class="n">coface</span><span class="p">])</span><span class="o">==</span><span class="mf">0.0</span>
+    
+            
+    <span class="c">## -- __init__ Method -------------------------------</span></div>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hpc</span><span class="p">):</span>
+
+
+        <span class="k">def</span> <span class="nf">hpcExtract</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span><span class="n">Plasm_fun</span><span class="p">,</span><span class="n">incr</span><span class="p">):</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">StdVectorFloat</span><span class="p">()</span>
+            <span class="n">u</span> <span class="o">=</span> <span class="n">StdVectorStdVectorInt</span><span class="p">()</span>
+            <span class="n">vdim</span> <span class="o">=</span> <span class="n">Plasm_fun</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span> <span class="o">+</span> <span class="n">incr</span>
+            <span class="n">feature</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">),</span> <span class="n">vdim</span><span class="p">):</span>
+                <span class="n">feature</span> <span class="o">+=</span> <span class="p">[[</span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="o">+</span><span class="n">vdim</span><span class="p">)]]</span>
+            <span class="k">return</span> <span class="n">feature</span><span class="p">,[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">u</span><span class="p">]</span>
+
+        <span class="n">verts</span><span class="p">,</span><span class="n">faces</span> <span class="o">=</span> <span class="n">hpcExtract</span><span class="p">(</span><span class="n">hpc</span><span class="p">,</span><span class="n">Plasm</span><span class="o">.</span><span class="n">ukpol</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">primal</span> <span class="o">=</span> <span class="n">PolytopalComplex</span><span class="p">(</span><span class="n">verts</span><span class="p">,</span><span class="n">faces</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">primal</span><span class="o">.</span><span class="n">view</span><span class="p">()</span>
+        <span class="n">dim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">primal</span><span class="o">.</span><span class="n">dim</span>
+
+        <span class="n">hfaces</span><span class="p">,</span><span class="n">u</span> <span class="o">=</span> <span class="n">hpcExtract</span><span class="p">(</span><span class="n">hpc</span><span class="p">,</span><span class="n">Plasm</span><span class="o">.</span><span class="n">ukpolf</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">cofaces</span> <span class="o">=</span> <span class="n">CovertexSet</span><span class="p">(</span><span class="n">hfaces</span><span class="p">)</span>
+
+        <span class="n">verts</span><span class="p">,</span><span class="n">faces</span> <span class="o">=</span> <span class="n">hpcExtract</span><span class="p">(</span><span class="n">Plasm</span><span class="o">.</span><span class="n">skeleton</span><span class="p">(</span><span class="n">hpc</span><span class="p">,</span><span class="n">dim</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span><span class="n">Plasm</span><span class="o">.</span><span class="n">ukpol</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">facesByVerts</span> <span class="o">=</span> <span class="p">[[</span><span class="n">verts</span><span class="p">[</span><span class="n">w</span><span class="p">]</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">face</span><span class="p">]</span> <span class="k">for</span> <span class="n">face</span> <span class="ow">in</span> <span class="n">faces</span><span class="p">]</span>
+        <span class="n">newfaces</span> <span class="o">=</span> <span class="p">[</span><span class="nb">sorted</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">primal</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">dict</span><span class="p">[</span><span class="n">code</span><span class="p">(</span><span class="n">w</span><span class="p">)]</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">face</span><span class="p">])</span>
+                     <span class="k">for</span> <span class="n">face</span> <span class="ow">in</span> <span class="n">facesByVerts</span><span class="p">]</span>
+
+        <span class="k">def</span> <span class="nf">normalize</span> <span class="p">(</span><span class="n">face</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">round_or_zero</span><span class="p">(</span><span class="n">face</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">&lt;</span><span class="mf">0.0</span><span class="p">:</span> <span class="n">face</span> <span class="o">=</span> <span class="n">SCALARVECTPROD</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">face</span><span class="p">])</span>
+            <span class="k">return</span> <span class="n">face</span>
+        <span class="k">def</span> <span class="nf">primalFacetIndex</span><span class="p">(</span><span class="n">face</span><span class="p">):</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">primal</span><span class="o">.</span><span class="n">dictos</span><span class="p">[</span><span class="n">dim</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="nb">repr</span><span class="p">(</span><span class="n">face</span><span class="p">)]</span>
+        <span class="k">def</span> <span class="nf">dualFacet</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">cofaces</span><span class="o">.</span><span class="n">dict</span><span class="p">[</span><span class="n">code</span><span class="p">(</span><span class="n">normalize</span><span class="p">(</span><span class="n">hfaces</span><span class="p">[</span><span class="n">i</span><span class="p">]))]</span>
+        
+        <span class="n">pairs</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">([(</span> <span class="n">primalFacetIndex</span><span class="p">(</span><span class="n">face</span><span class="p">),</span><span class="n">dualFacet</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="p">)</span>
+                    <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">face</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">newfaces</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="nb">repr</span><span class="p">(</span><span class="n">face</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">primal</span><span class="o">.</span><span class="n">dictos</span><span class="p">[</span><span class="n">dim</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
+
+        <span class="c"># remove duplicates</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dualCocells</span> <span class="o">=</span> <span class="p">[</span><span class="n">pairs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pairs</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                       <span class="k">if</span> <span class="n">pairs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">!=</span> <span class="n">pairs</span><span class="p">[</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">]]</span> <span class="o">+</span> <span class="p">[</span><span class="n">pairs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="n">dualCocells</span> <span class="o">=</span> <span class="p">[[</span><span class="n">pair</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dualCocells</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dual</span> <span class="o">=</span> <span class="n">PolytopalComplex</span><span class="p">(</span><span class="n">cofaces</span><span class="o">.</span><span class="n">points</span><span class="p">,</span> <span class="n">dualCocells</span><span class="p">)</span>
+
+        
+
+    <span class="c">## -- __repr__ Method -------------------------------TODO:</span>
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Return a string representation of this CellComplex in the form of a list of cells.&#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">Dual polytope: </span><span class="se">\n\t</span><span class="s">.primal.n: {0}&#39;</span><span class="o">+</span> 
+                        <span class="s">&#39;</span><span class="se">\n\t</span><span class="s">.primal.dim: {1}&#39;</span><span class="o">+</span> 
+                        <span class="s">&#39;</span><span class="se">\n\t</span><span class="s">.dual.n: {2}&#39;</span><span class="o">+</span> 
+                        <span class="s">&#39;</span><span class="se">\n\t</span><span class="s">.dual.dim: {3}&#39;</span><span class="o">+</span> 
+        <span class="s">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">primal</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">primal</span><span class="o">.</span><span class="n">dim</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dual</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dual</span><span class="o">.</span><span class="n">dim</span><span class="p">)</span>
+
+
+    <span class="c">## -- __str__ Method -------------------------------</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Return a string representation of this CellComplex in the form of a list of cells.&#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">Dual polytope: </span><span class="se">\n\t</span><span class="s">.primal.vertices: {0}&#39;</span><span class="o">+</span> 
+                        <span class="s">&#39;</span><span class="se">\n\t</span><span class="s">.primal.cells: {1}&#39;</span><span class="o">+</span>
+                        <span class="s">&#39;</span><span class="se">\n\t</span><span class="s">.dual.vertices: {2}&#39;</span><span class="o">+</span> 
+                        <span class="s">&#39;</span><span class="se">\n\t</span><span class="s">.dual.cells: {3}&#39;</span><span class="o">+</span>
+                        <span class="s">&#39;</span><span class="se">\n\t</span><span class="s">.primal_dual.cocells: {4}&#39;</span><span class="o">+</span>
+        <span class="s">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">primal</span><span class="o">.</span><span class="n">vertices</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">primal</span><span class="o">.</span><span class="n">cells</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">],</span>
+                   <span class="bp">self</span><span class="o">.</span><span class="n">dual</span><span class="o">.</span><span class="n">vertices</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dual</span><span class="o">.</span><span class="n">cells</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                   <span class="bp">self</span><span class="o">.</span><span class="n">dualCocells</span><span class="p">)</span>
+
+        
+</pre></div></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">Chompy 0.1 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, DIA -- Roma Tre University.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.
+    </div>
+  </body>
+</html>
