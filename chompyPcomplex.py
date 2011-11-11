@@ -27,6 +27,9 @@ class PolytopalComplex(object):
 #########################################################
 	""" The data type to represent a bounded convex set,
 		supporting a cell complex of polytopal boundary faces. """
+		
+	# TODO (alberto):  substitute pyplasm with scipy.spatial.qhull
+	###############################################################
 
 	## -- __init__ Method -------------------------------
 	def __init__(self, points, cells=[]):
