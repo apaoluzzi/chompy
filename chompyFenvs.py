@@ -54,13 +54,17 @@ def triangle_array(m,n,points):
 	out = simplexGrid([m*[1.],n*[1.]])
 	return SimplicialComplex(CAT(points),out.cells[2])
 
+
 def cart2cyl2d(point):
 	u,v = point
 	return [COS(u),SIN(u),v]
 
+
+
 def cylsurface(r=1,h=1,n=16,m=2):
 	return Map(cart2cyl2d, simplexGrid([n*[2*PI/n], m*[1.0/m]])).scale([r,r,h])
 	
+
 
 def cart2cyl3d(point):
 	u,v,w = point
@@ -77,6 +81,7 @@ def cart2torus2d(r,R):
 		u,v = point
 		return [(R+r*COS(v))*COS(u),(R+r*COS(v))*SIN(u),r*SIN(v)]
 	return cart2torus2d0
+
 
 def torus_surface(r=1,R=3,n=12,m=8):
 	return Map(cart2torus2d(r,R), simplexGrid([n*[2*PI/n],m*[2*PI/m]]))

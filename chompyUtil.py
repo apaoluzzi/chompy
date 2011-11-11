@@ -30,7 +30,6 @@ from pyplasm import *
 import operator,copy,datetime,chompyIntegr,scipy,csv
 from chompyIntegr import T3
 import itertools,string
-#from collections import OrderedDict
 
 def myprint(arg1,arg2): print "\n"+arg1+" =", arg2
 
@@ -72,6 +71,25 @@ def code (vect):
 	Used to generate the vertex keys in PointSet dictionary, and other similar operations.
 	"""
 	return prepKey(AA(fixedPrec)(vect))
+
+		
+def cat(listOfLists): 
+	"""
+	To catenate a list of lists (flat:  no recursion).
+	
+	Return a list.
+	"""
+	return [element for list in listOfLists for element in list]
+		
+	
+def atan2(point):
+	"""
+	To compute the ATAN function starting from COS and SIN.
+	
+	Return a number between between the interval [-pi,pi].
+	"""
+	x,y = point
+	return math.atan2(x,y)
 
 
 ## --------------------------------------------------
@@ -119,6 +137,7 @@ def progressive_sum(List):
 def centroid (obj,face):
 	""" To compute the centroid od a d-face.
 
+	`face` is the canonical representation of face (list of vertex indices)
 	Return a n-point, convex combination of d+1 n-points.
 	"""
 	simplex = [ obj.vertices.points[v]  for v in face ]
@@ -127,6 +146,8 @@ def centroid (obj,face):
 	C = mat(d*[1.0/d], dtype=scipy.float32)
 	point = (C * A).tolist()[0]
 	return point
+	
+def Centroid (args): return centroid (*args)
 
 
 def _init_CellComplex (verts, d_simplices):

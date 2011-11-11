@@ -150,6 +150,13 @@ class PointSet(list):  ## NEW
     
 ##<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+def remap(points):
+	verts = PointSet(points)
+	def remap0(k): return verts.dict[code(points[k])]
+	return remap0,verts
+
+
 ##if __name__ == "__main__" and __debug__:
 ##    covectors = S1(UKPOLF(PROD([QUOTE([1,1,1]),QUOTE([1,1,1])])))
 ##    covectors = PointSet(covectors)

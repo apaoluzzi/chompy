@@ -307,143 +307,69 @@ class PolytopalComplex(object):
 		return self
 
 
-	## -- boundary Method -------------------------------
-	def boundary (self):
+	def boundary(self):
 		""" To compute the boundary of a polytopal d-complex.
-
+	
 		Return the closed (polytopal) boundary (d-1)-complex .
 		"""
-		myprint(">>>>>>>>>>"," eccomi in Pcomplex!!")
-
-		obj = self.copy()
-		cells = obj.cells
-		vertices = obj.vertices.points
-		d = obj.dim
-		dictos = obj.dictos
-		h = obj.homology
-		a = array(h[d])
-
-		V = array( len(a)*[1] )
-		J = a[:,0]
-		I = a[:,1]
-
+	
+		""" local copy of the input complex ------------------------------ """
+		cells = self.cells
+		points = self.vertices.points
+		d = self.dim
+		dictos = self.dictos
+		boundary3 = array(self.homology[d])
+	
+		""" Computation of boundary faces -------------------------------- """
+		V = array( len(boundary3)*[1] )
+		J = boundary3[:,0]
+		I = boundary3[:,1]
 		A = sparse.coo_matrix((V,(I,J)), shape=(max(I)+1, max(J)+1)).tocsr()
-
 		boundary_indices = [i for i in range(A.shape[0]) if A[i].sum() == 1]
-
-		# make boundary orientation coherent  --------------------------
-		boundary_pairs = [(i,j) for (i,j) in a if (j in boundary_indices)] 
-		facetsdict = dict([[v,k] for k,v in dictos[d-1].items()])
-		cellsdict = dict([[v,k] for k,v in dictos[d].items()])
-		pairs = [(cellsdict[c], facetsdict[f]) for c,f in boundary_pairs]
+		facetdict = dict([[index,eval(key)] for key,index in dictos[d-1].items()
+			if index in boundary_indices])
+	
+		""" Computation of facet orientation ----------------------------- """
+		orderedFacets = []
 		
-		def getPointUnderFace(pair):
-			cell,face = AA(eval)(pair)
-			vert = list(set(cell).difference(face))[0]
-			belowPoint = eval(obj.vertices.ind[vert])
-			faceBarycenter = centroid(obj,face)
-			facePoints = [eval(obj.vertices.ind[v]) for v in face]
-			return [belowPoint,faceBarycenter,facePoints]
-
-		triples = [getPointUnderFace(pair) for pair in pairs]
-		belowPoints,faceBarycenters,facePoints = TRANS(triples)
-		faceVectors = [[list(point - triple[1]) for point in AA(array)(triple[2])] 
-					for triple in triples]
-		transforms_3d_2d = AA(mat)(
-			[vect3d[0:2] + [list(array(belowPoints[k])-faceBarycenters[k])] 
-					for k,vect3d in enumerate(faceVectors)])
-		transforms_3d_2d = [transform.I for transform in transforms_3d_2d]
-		faceVectors3d = [(faceVectors[k] * transform).tolist()
-						for k,transform in enumerate(transforms_3d_2d)]
-		faceVectors2d = [AA(RTAIL)(vect3d) for vect3d in faceVectors3d]
-		
-		def simplex(cell):
-			out = [point+[1.0] for point in cell]
-			return out
-		
-		def volume(cell):
-			return linalg.det(mat(simplex(cell)))
+		for facetIndex in boundary_indices:
+			facet = self.cells[d-1][facetIndex]
+			facetPoints = [eval(self.vertices.ind[k]) for k in facet]
+			facetCenter = centroid(self,facet)
+			facetVectors = (array(facetPoints) - facetCenter).tolist()
 			
-		faces = []
-		for k,face in enumerate(facePoints):
-			vol = volume(face[:-1]+[belowPoints[k]])
-			verts = eval(pairs[k][1])
-			if vol>0:  faces += [[ verts[0], verts[1], verts[3], verts[2] ]]
-			else:  faces += [[ verts[2], verts[3], verts[1], verts[0] ]]
-
-#		inv_dict = dict([[v,k] for k,v in dictos[d-1].items()])
-#		faces = [eval(inv_dict[k]) for k in boundary_indices]
-		return PolytopalComplex(vertices, faces)
-
-
-#	## -- boundary Method -------------------------------
-#	def boundary (self):
-#		""" To compute the boundary of a simplicial d-complex.
-# 
-#		Return the closed (d-1)-complex triangulating the boundary of the input complex.
-#		"""
-#		obj = self.copy()
-#		cells = obj.cells
-#		vertices = obj.vertices.points
-#		d = obj.dim
-#		dictos = obj.dictos
-#		h = obj.homology
-#		a = array(h[d])
-# 
-#		V = array( len(a)*[1] )
-#		J = a[:,0]
-#		I = a[:,1]
-# 
-#		A = sparse.coo_matrix((V,(I,J)), shape=(max(I)+1, max(J)+1)).tocsr()
-# 
-#		# make boundary orientation coherent  --------------------------
-# 
-#		def simplex(cell):
-#			point = self.vertices.ind
-#			return [eval(point[k])+[1.0] for k in cell]
-#		
-#		def volume(cell):
-#			return linalg.det(mat(simplex(cell)))
-# 
-#		def orientation():
-#			if d == self.rn:   # solid complex
-#				out = [volume(cell) for cell in cells[-1]]
-#			else:				# embedded complex
-#				out = [linalg.det(linalg.qr(mat(simplex(cell)))[1][:,:-1])
-#					   for cell in cells[-1]]  # DEBUG (choose minor with det(minor != 0	))
-#			return out		
-# 
-#		
-#		boundary_indices = [i for i in range(A.shape[0]) if A[i].sum() == 1 ] 
-#			
-#		boundary_signs = orientation()	 
-# 
-#		boundary_pairs = [(i,j) for (i,j) in a 
-#			if (j in boundary_indices)] 
-# 
-# 
-#		facetsdict = dict([[v,k] for k,v in dictos[d-1].items()])
-#		cellsdict = dict([[v,k] for k,v in dictos[d].items()])
-#						
-#		def invertOrientation(facet):
-#			facet[0],facet[-1] = facet[-1],facet[0]
-#			return facet
-# 
-# 
-#		facets = [eval(facetsdict[k]) for k in boundary_indices]
-#		facets = [invertOrientation(eval(facetsdict[facet]))  
-#					if boundary_signs[face]<0 else eval(facetsdict[facet])
-#					for face,facet in boundary_pairs]
-#				
-#		# remapping section -----------------------------------------------
-#		
-#		if facets != []:
-#			oldinds = list(set(CAT(facets)))
-#			newverts = PointSet([eval(obj.vertices.ind[k]) for k in oldinds])
-#			newfacets = [[ newverts.dict[obj.vertices.ind[k]] 
-#							for k in facet] for facet in facets]
-#			return SimplicialComplex(newverts.points, newfacets)
-#		else: return SimplicialComplex([], [])
+			cellIndex = [c for (c,f) in boundary3 if (f==facetIndex)][0]
+			cell = self.cells[d][cellIndex]
+			cellCenter = centroid(self,cell)
+			cellVector = VECTDIFF([cellCenter,facetCenter])
+	
+			transform_3d_2d = mat(facetVectors[0:2] + [cellVector])
+			if linalg.det(transform_3d_2d) == 0.0:
+				transform_3d_2d = mat(facetVectors[1:3] + [cellVector])
+			transform_3d_2d = transform_3d_2d.I
+	
+			facetVectors3d = (facetVectors * transform_3d_2d).tolist()
+			facetVectors2d = AA(RTAIL)(facetVectors3d)
+			ordering = sorted([[atan2(vect),k]
+							   for k,vect in enumerate(facetVectors2d)])
+			order = [ind for angle,ind in ordering]
+			orderedFacet = [facet[k] for k in order]
+			
+			vol = linalg.det(transform_3d_2d)
+			if vol < 0: orderedFacet = REVERSE(orderedFacet)
+			orderedFacets += [orderedFacet]
+	
+		orderedFacetsByPoints = [[self.vertices.ind[k] for k in facet]
+								 for facet in orderedFacets]
+			
+	
+		""" Remove unused cells from input complex (w remapping) --------- """
+		
+		out = PolytopalComplex(points, facetdict.values())
+		orderedFacets = [[out.vertices.dict[pointKey] for pointKey in face]
+						 for face in orderedFacetsByPoints]
+		out.cells[2] = orderedFacets
+		return out
 
 
 def complexProd(args):

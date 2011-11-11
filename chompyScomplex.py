@@ -24,14 +24,6 @@ from chompyPcomplex import *
 from copy import deepcopy
 
 
-
-def remap(points):
-	verts = PointSet(points)
-	def remap0(k): return verts.dict[code(points[k])]
-	return remap0,verts
-
-
-
 def _init_CellComplex (verts, d_simplices):
 	
 		vertices = PointSet(verts)
