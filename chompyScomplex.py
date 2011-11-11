@@ -24,25 +24,6 @@ from chompyPcomplex import *
 from copy import deepcopy
 
 
-def _init_CellComplex (verts, d_simplices):
-	
-		vertices = PointSet(verts)
-
-		def identify(d_simplices):
-			new_simplices = []
-			for simplex in d_simplices:
-				new_simplex = []
-				for v in simplex:
-					if type(v) == list: v = v[0]
-					point = map(lambda x: round_or_zero(x),
-								vertices.points[v])
-					index = vertices.dict[code(point)]
-					new_simplex = new_simplex + [index]
-				new_simplices += [new_simplex]
-			return new_simplices
-		
-		d_simplices = identify(d_simplices)
-		return (map(eval, vertices.ind.values()), d_simplices)
 
 #########################################################
 class SimplicialComplex(PolytopalComplex):
@@ -60,21 +41,19 @@ class SimplicialComplex(PolytopalComplex):
 		""" A new simplicial complex with given 0-cells and d-cells. """
 
 		if vertices != []:
-			vertices, d_simplices = _init_CellComplex (vertices, d_simplices)
 			self.vertices = PointSet(vertices)
-			self.rn = len(vertices[0])
+			self.rn = self.vertices.dim
 			
 			self.dim = len(d_simplices[0]) - 1
 			self.cells = (self.dim + 1)*[[]]
-			self.cells[0] = map(lambda x: [x], self.vertices.ind.keys())
-			self.cells[self.dim] = d_simplices
+			self.cells[0] = [[key] for key in self.vertices.ind.keys()]
+			self.cells[-1] = d_simplices
 			
 			self.dictos = mktables(cell_complex(self.cells))
 			self.inv_dict = [
 				dict([[v,k] for k,v in self.dictos[i].items()])
 					for i in range(self.dim + 1) ]
 			self.homology = homology_maps(self.dictos)
-			self.cells[-1] = map(eval, self.inv_dict[-1].values())
 			
 		else:
 			self.vertices = []

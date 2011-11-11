@@ -42,11 +42,10 @@ class PointSet(list):  ## NEW
                 operator.setitem(self.dict,code(points[i]), k)
                 
         self.ind = dict([[v,k] for k,v in self.dict.items()])
-#        self.points = points
         self.points = AA(eval)(self.ind.values())
-#        self.points = [eval(self.ind[k]) for k in range(len(self.dict))]
-        self.dim = len(self.points[0])
-        self.m = len(self.dict)
+        self.dim = len(self.points[0]) # TODO: set to zero
+        self.rn = self.dim
+        self.m = len(self.dict) # number of points
 
 
     ## -- __repr__ Method -------------------------------
