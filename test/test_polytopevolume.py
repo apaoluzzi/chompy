@@ -1,10 +1,16 @@
 from chompy import *
 
 c = cuboid([1,2,3])
-c = CuboidalComplex([[1],[2],[3]]) 
-c.boundary().view(2)
+c = CuboidalComplex([[1],[2],[3]])
 
-draw(c.boundary())
+c = cprod([intervals(2.0)(2), intervals(2.0)(2), intervals(2.0)(2)]).boundary()
+##c = cprod([intervals(1)(1), intervals(1)(1), intervals(1)(1)])
+##draw(c,expl=[2,2,2])
+
+
+c.view()
+
+draw(c)
 
 
 ##cells = [[0,2,4,6],[0,1,2,4],[2,3,4,6],[0,4,5,6],[0,2,6,7]]
