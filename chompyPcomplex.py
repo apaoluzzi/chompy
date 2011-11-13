@@ -376,11 +376,38 @@ class PolytopalComplex(object):
 		
 		
 	def project(self):
+		"""
+		Projection of the d-complex boundary on the subspace of the first n-1 coordinates.
+
+		Return a polytopal (d-1)-complex.
+		"""
 		obj = self.boundary()
+		
+		# remove the back-faces from the boundary ----------------------------
+		outvert = (array(obj.vertices.max()) + obj.rn*[1]).tolist()
+
+		def frontFace(verts):
+			verts = [array(v) - verts[0] for v in (verts[1:3] + [outvert])]
+			transformation = mat(verts)
+			transformation = transformation.I
+			if linalg.det(transformation) > 0.0: return True
+			else: return False
+					
+		frontFaces = [face for face in obj.cells[-1] 
+						if frontFace([obj.vertices.points[k] for k in face])]
+		
 		points = obj.vertices.project(1).points
 		ptk,verts = remap(points)
-		def pred(face): return COMP([C(EQ)(len(face)),len,set])(face)
-		cells = [AA(ptk)(face) for face in obj.cells[-1] if pred(AA(ptk)(face))]
+		
+		def pred(face): 
+			"""
+			Predicate to test if there are no duplicates in a sequence.
+			Return `True` if there are no duplicate elements in the input parameter.
+			"""
+			return COMP([C(EQ)(len(face)),len,set])(face)
+			
+		cells = [AA(ptk)(face) for face in frontFaces if pred(AA(ptk)(face))]
+		myprint("cells",cells\)
 		return PolytopalComplex(verts.points,cells)
 		
 
