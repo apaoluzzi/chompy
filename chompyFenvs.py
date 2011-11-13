@@ -109,8 +109,7 @@ def schlegel(pol):
 
 def intervals(tip):
     def intervals0(n):
-        steps = n * [float(tip)/n]
-        points = [[x] for x in progressive_sum(steps)]
+        points = [[x] for x in scipy.linspace(0.0, tip, n+1)]
         return polyline(points)
     return intervals0
 
@@ -122,8 +121,8 @@ def graph(domain):
     return graph0
 
 
-def circumpherence(r,n=24):
-    return graph(intervals(2*PI)(n))([SIN,COS]).scale([r,r])
+def circumpherence(r,nsides=24):
+    return graph(intervals(2*math.pi)(nsides))([math.cos,math.sin]).scale([r,r])
 
 
 def helix(radius=1,pitch=1,n=24,turns=1):

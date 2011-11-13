@@ -87,13 +87,22 @@ class PointSet(list):  ## NEW
         self.points = [eval(self.ind[v]) for v in range(self.m)]
         return self
 
-    ## -- embed Method -------------------------------
+    ## -- project Method -------------------------------
+    def project (self, n):
+    	newPointSet = copy.deepcopy(self)
+        def modify(v): return code([coord for coord in eval(v)[:-n]])
+        newPointSet.update(modify)
+        newPointSet.rn -= n
+        return newPointSet #PointSet(newPointSet.points)
+
+    ## -- embed Method ---------------------------------
     def embed (self, n):
         def modify(v): return code(eval(v) + n*[0.0])
         self.update(modify)
         self.dim += n
         return self
     
+    ## -- transformation Methods ------------------------
     def transform (self, matrix):
         def modify(v): return code(mat(matrix) * mat(AA(LIST)(eval(v))))
         self.update(modify)

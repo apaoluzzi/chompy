@@ -151,7 +151,7 @@ class SimplicialComplex(PolytopalComplex):
 
 	## -- extrude Method -------------------------------
 	def extrude (self, hlist):
-		""" To complute the multiple linear extrusion of a d-complex.
+		""" To compute the multiple linear extrusion of a d-complex.
 		Map R^d -> R^(d+1), according to: Ferrucci & Paoluzzi, CAD 1991.
 		'cells' is a simplicial complex, given as a list of lists;
 		'hlist' is a list of heights in the added dimension.

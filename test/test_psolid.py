@@ -1,17 +1,20 @@
 from chompy import *
 
-dom1 = intervals(2*PI)
+dom1 = intervals(2*pi)
 dom2 = intervals(1)
 dom = cprod([dom1(12),dom2(1),dom2(1)])
 dom.view()
 
 def psurf(point,r=0.5):
     u,v,w = point
-    return [(1-r*w)*cos(u), (1-r*w)*sin(u), v]
+    return [(1.0-r*w)*cos(u), (1.0-r*w)*sin(u), v]
 
 Map(psurf, dom, PolytopalComplex).view()
-Map(psurf, dom.boundary(), PolytopalComplex).view(2)
-Map(psurf, dom, PolytopalComplex).boundary().view(2)
+
+a = Map(psurf, dom, PolytopalComplex)
+draw(a.boundary())
+
+
 #draw(Map(psurf, dom, "PolytopalComplex"))
 ##
 ##

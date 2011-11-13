@@ -76,8 +76,8 @@ class PolytopalComplex(object):
 
 		def convert(points, cells):
 			cellsByVertices = \
-				[[ points[v-1] for v in cell] for cell in cells]   ### CHECK !!!
-			
+				[[ points[v-1] for v in cell] for cell in cells]	 ### CHECK !!!
+			#myprint("cellsByVertices",cellsByVertices)
 			return [[self.vertices.dict[code(p)] for p in cell]
 					for cell in cellsByVertices]
 
@@ -373,6 +373,17 @@ class PolytopalComplex(object):
 						 for face in orderedFacetsByPoints]
 		out.cells[2] = orderedFacets
 		return out
+		
+		
+	def project(self):
+		obj = self.boundary()
+		points = obj.vertices.project(1).points
+		ptk,verts = remap(points)
+		def pred(face): return COMP([C(EQ)(len(face)),len,set])(face)
+		cells = [AA(ptk)(face) for face in obj.cells[-1] if pred(AA(ptk)(face))]
+		return PolytopalComplex(verts.points,cells)
+		
+
 
 
 def complexProd(args):
