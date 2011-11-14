@@ -119,8 +119,8 @@ class PointSet(list):  ## NEW
         return self
 
     def rotate (self, axis1, axis2, angle):
-        axis1 += -1
-        axis2 += -1
+        axis1 -= 1
+        axis2 -= 1
         dim = self.dim
         rotation = eye(dim,dim)
         c = math.cos(angle)

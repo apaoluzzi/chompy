@@ -64,6 +64,7 @@ def fixedPrec(value):
 	if out == '-0.': out = '0.'
 	return out
 	
+	
 def code (vect): 
 	"""
 	To generate a string representation of a number array.

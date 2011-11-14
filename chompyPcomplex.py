@@ -270,44 +270,48 @@ class PolytopalComplex(object):
 
 	## -- translate Method -------------------------------
 	def translate(self, vect):
-		""" To translate the SimplicialComplex by the vect as side effect.
+		""" To translate the object by the vect.
 
-		Return self.
+		Return a new object.
 		"""
-		self.vertices.translate(vect)
-		return self
+		obj = copy.deepcopy(self)
+		obj.vertices.translate(vect)
+		return obj
 
 
 	## -- scale Method -------------------------------
 	def scale(self, vect):
-		""" To scale the SimplicialComplex by the vect as side effect.
+		""" To scale the object by the vect.
 
-		Return self.
+		Return a new object.
 		"""
-		self.vertices.scale(vect)
-		return self
+		obj = copy.deepcopy(self)
+		obj.vertices.scale(vect)
+		return obj
 
 
 	## -- rotate Method -------------------------------
 	def rotate (self, axis1, axis2, angle):
-		""" To rotate the SimplicialComplex by the 'angle' as side effect.
+		""" To rotate the object by the 'angle'.
 		The changed coords are 'axis1', 'axis2'
 
-		Return self.
+		Return a new object.
 		"""
-		self.vertices.rotate(axis1, axis2, angle)
-		return self
+		obj = copy.deepcopy(self)
+		obj.vertices.rotate(axis1, axis2, angle)
+		return obj
 
 
 	## -- transform Method -------------------------------
 	def transform (self, matrix):
-		""" To rotate the SimplicialComplex by the 'angle' as side effect.
+		""" To rotate the object by the 'angle'.
 		The changed coords are 'axis1', 'axis2'
 
-		Return self.
+		Return a new object.
 		"""
-		self.vertices.transform(matrix)
-		return self
+		obj = copy.deepcopy(self)
+		obj.vertices.transform(matrix)
+		return obj
 
 
 	def boundary(self):
@@ -384,7 +388,7 @@ class PolytopalComplex(object):
 		obj = self.boundary()
 		
 		# remove the back-faces from the boundary ----------------------------
-		outvert = (array(obj.vertices.max()) + obj.rn*[1]).tolist()
+		outvert = (array(obj.vertices.max()) + ((obj.rn-1)*[0]+[1000])).tolist()  # to make better
 
 		def frontFace(verts):
 			verts = [array(v) - verts[0] for v in (verts[1:3] + [outvert])]
@@ -407,7 +411,6 @@ class PolytopalComplex(object):
 			return COMP([C(EQ)(len(face)),len,set])(face)
 			
 		cells = [AA(ptk)(face) for face in frontFaces if pred(AA(ptk)(face))]
-		myprint("cells",cells\)
 		return PolytopalComplex(verts.points,cells)
 		
 

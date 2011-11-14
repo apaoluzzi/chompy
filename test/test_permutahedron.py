@@ -13,15 +13,6 @@
 ##
 ##    permutations:<1,2,3> 
 ##
-##    DEF permutahedron (d::IsIntPos) =
-##        ( project:1 ∼ rotations ∼ translation ):object
-##        WHERE
-##            object = (MKPOL ∼ [ID, [INTSTO ∼ LEN], K:<<1>>]):vertices,
-##            vertices = permutations:(1 .. (d+1)),
-##            center = Meanpoint: vertices,
-##            translation = T:(1..(d+1)):(AA:-: center),
-##            rotations = COMP:(((CONS ∼ AA:R):(1..d DISTR (d+1))):(PI/4))
-##        END;
 
 
 def remove(args):
@@ -50,44 +41,28 @@ def triangle_strip(points):
 	ptk,verts = remap(points)
 	cells = [AA(ptk)([k,k+1,k+2]) for k in range(len(points)-2)]	
 	return SimplicialComplex(points,cells)
-
-
-##a = cuboid([1,1,1]).vertices
-##print a
-##a.project(1)
-##print a.project(1)
-
     
 
-
-project(cuboid([1,1,1])).view()
-
-a = project(cuboid([1,1,1]))
-draw(a)
-
-simplex(3).view()
-a = project(simplex(3))
-draw(a)
-
-
-
-a = project(simplexGrid([4*[1],3*[1],2*[1]]))
-a.view()
-draw(a)
+##    DEF permutahedron (d::IsIntPos) =
+##        ( project:1 ∼ rotations ∼ translation ):object
+##        WHERE
+##            object = (MKPOL ∼ [ID, [INTSTO ∼ LEN], K:<<1>>]):vertices,
+##            vertices = permutations:(1 .. (d+1)),
+##            center = Meanpoint: vertices,
+##            translation = T:(1..(d+1)):(AA:-: center),
+##            rotations = COMP:(((CONS ∼ AA:R):(1..d DISTR (d+1))):(PI/4))
+##        END;
 
 
+def permutahedron(d): 
+    vertices = permutations(range(1,d+2))
+    myprint("vertices",vertices)
+    obj = PolytopalComplex(vertices,[range(len(vertices))])
+    center = centroid(obj,range(len(vertices)))
+    myprint("center",center)
+    translation = t(range(d+1))([-x for x in center])
+    rotations = COMP(CONS(AA(r)(DISTR([range(1,d),d+1])))(pi/4))
+    return rotations(translation(obj)).project()
 
 
-
-    
-
-
-
-def permutahedron(d): pass
-##    obj =
-##    vertices =
-##    center =
-##    translation =
-##    rotations = 
-##
-##    return COMP([project(1),rotations,translation])(obj)
+permutahedron(2).view()
