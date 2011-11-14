@@ -375,7 +375,7 @@ class PolytopalComplex(object):
 		out = PolytopalComplex(points, facetdict.values())
 		orderedFacets = [[out.vertices.dict[pointKey] for pointKey in face]
 						 for face in orderedFacetsByPoints]
-		out.cells[2] = orderedFacets
+		out.cells[-1] = orderedFacets
 		return out
 		
 		

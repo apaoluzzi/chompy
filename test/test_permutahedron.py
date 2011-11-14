@@ -62,7 +62,7 @@ def permutahedron(d):
     myprint("center",center)
     translation = t(range(d+1))([-x for x in center])
     rotations = COMP(CONS(AA(r)(DISTR([range(1,d),d+1])))(pi/4))
-    return rotations(translation(obj)).project()
+    return rotations(translation(obj))#.project()
 
 
 permutahedron(2).view()
