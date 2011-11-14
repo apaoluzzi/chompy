@@ -385,21 +385,29 @@ class PolytopalComplex(object):
 
 		Return a polytopal (d-1)-complex.
 		"""
-		obj = self.boundary()
 		
-		# remove the back-faces from the boundary ----------------------------
-		outvert = (array(obj.vertices.max()) + ((obj.rn-1)*[0]+[1000])).tolist()  # to make better
-
-		def frontFace(verts):
-			verts = [array(v) - verts[0] for v in (verts[1:3] + [outvert])]
-			transformation = mat(verts)
-			transformation = transformation.I
-			if linalg.det(transformation) > 0.0: return True
-			else: return False
-					
-		frontFaces = [face for face in obj.cells[-1] 
-						if frontFace([obj.vertices.points[k] for k in face])]
 		
+		# if solid: ----------------------------------------------------------
+		if self.dim == self.rn:
+		
+			# remove the back-faces from the boundary ----------------------------
+			obj = self.boundary()
+			outvert = (array(obj.vertices.max()) + (obj.rn)*[1]).tolist()  # to make better
+	
+			def frontFace(verts):
+				verts = [array(v) - verts[0] for v in (verts[1:3] + [outvert])]
+				transformation = mat(verts)
+				transformation = transformation.I
+				if linalg.det(transformation) > 0.0: return True
+				else: return False
+						
+			frontFaces = [face for face in obj.cells[-1] 
+							if frontFace([obj.vertices.points[k] for k in face])]
+		# else ----------------------------------------------------------------
+		else:
+			obj = copy.deepcopy(self)
+			frontFaces = [face for face in obj.cells[-1]]
+			
 		points = obj.vertices.project(1).points
 		ptk,verts = remap(points)
 		

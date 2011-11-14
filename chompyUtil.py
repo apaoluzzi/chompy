@@ -25,7 +25,7 @@ __debug = False
 ROUND_ZERO = 1E-06
 
 from numpy import array,average
-from scipy import sparse,mat,eye,linalg
+from scipy import sparse,mat,eye,linalg,ndarray
 from pyplasm import *
 import operator,copy,datetime,chompyIntegr,scipy,csv
 from chompyIntegr import T3
@@ -96,6 +96,21 @@ def atan2(point):
 ## --------------------------------------------------
 ## --Utility functions-------------------------------
 ## --------------------------------------------------	 
+
+
+def permutations (sequence):
+    if len(sequence) <= 1: return [sequence]
+    ret = []
+    for i in range(len(sequence)):
+        element = sequence[i]
+        rest    = permutations(sequence[:i] + sequence[i+1:])
+        for r in rest: ret+=[[element] + r]
+    return ret
+
+if "__name__" == "__main__":
+
+    myprint("permutations([1,2,3,4])",permutations([1,2,3,4]))
+    
 
 def __evalprint__(string):
 	"""
