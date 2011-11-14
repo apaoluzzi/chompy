@@ -110,7 +110,6 @@ def trianglefan (points):
     Return a SimplicialComplex instance.
     """
     edges = polyline(points)
-    edges.view()
     center = centroid(edges,range(len(edges.vertices.points)))
     points = edges.vertices.points + [center]
     n = len(points)
