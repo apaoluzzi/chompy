@@ -7,4 +7,6 @@ myprint("points",points)
 trianglefan(points).view(2)
 pts = PointSet(points).translate([2,1])
 points = pts.points + [pts.points[0]]
+trianglefan(points).view()
 trianglefan(points).view(2)
+trianglefan(points).boundary().view(2)

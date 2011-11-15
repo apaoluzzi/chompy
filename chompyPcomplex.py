@@ -198,11 +198,13 @@ class PolytopalComplex(object):
 			
 		cells = self.cells
 		if not (self.vertices == [] and cells == []):
-			vertices = CAT(AA(eval)(self.vertices.ind.values()))
 			dim = self.dim
-			rn = self.rn
-			plasm(rn, vertices, cells[d])
-		else: print "cannot view an empty complex!"
+			if d <= dim:
+				vertices = CAT(AA(eval)(self.vertices.ind.values()))
+				rn = self.rn
+				plasm(rn, vertices, cells[d])
+			else: print "Error: a ",d,"-skeleton does not exist!"
+		else: print "Error: cannot view an empty complex!"
 		
 	## -- HPC constructor -------------------------------
 	def hpolc(self):
