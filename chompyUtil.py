@@ -24,6 +24,7 @@ __debug = False
 
 ROUND_ZERO = 1E-06
 
+from math import pi,sin,cos
 from numpy import array,average
 from scipy import sparse,mat,eye,linalg,ndarray
 from pyplasm import *

@@ -200,6 +200,16 @@ def helix(radius=1,pitch=1,n=24,turns=1):
         [SIN,COS,RAISE(DIV)([ID,K(2*PI/pitch)])]).scale([radius,radius,1])
 
 
+def polygon(n):
+    if n >= 3:
+        points = [[cos(alpha),sin(alpha)]
+                  for alpha in (scipy.linspace(0.0, 2*pi, n+1) + (pi*n)/2)]
+        return trianglefan(points)
+    else: print "Error:  number of polygon sides too small"
+
+
+def circle2d(n=32):
+    return polygon(n)
 
 
 if __name__=="__main__":
