@@ -1,12 +1,11 @@
 from chompy import *
 from scipy.spatial.qhull import *
 
-points = [CONS([cos,sin])(alpha) for alpha in scipy.linspace(0.0,2*pi,7)]
+points = [[cos(alpha),sin(alpha)] for alpha in scipy.linspace(0.0,2*pi,7)]
 myprint("points",points)
+points = (array(points) + [2.,1.]).tolist()
+myprint("translated points",points)
 
-trianglefan(points).view(2)
-pts = PointSet(points).translate([2,1])
-points = pts.points + [pts.points[0]]
 trianglefan(points).view()
 trianglefan(points).view(2)
-trianglefan(points).boundary().view(2)
+trianglefan(points).boundary().view()
