@@ -1,4 +1,6 @@
 ﻿from chompy import *
+from scipy.spatial.qhull import *
+import numpy as np
 
 
 def remove(args):
@@ -20,8 +22,9 @@ remove([5, range(10)])
 
 
 def permutahedron(d): 
-    vertices = permutations(range(1,d+2))
-    obj = PolytopalComplex(vertices,[range(len(vertices))])
+    vertices = np.array(permutations(range(1,d+2)), dtype=double)
+    cells = Delaunay(vertices).convex_hull.tolist()
+    obj = SimplicialComplex(vertices.tolist(),cells)
     center = centroid(obj,range(len(vertices)))
     translation = t(range(d+1))([-coord for coord in center])
     rotations = COMP(CONS(AA(r)(DISTR([range(1,d+1),d+1])))(pi/4))
