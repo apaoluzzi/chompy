@@ -195,7 +195,7 @@ def shift (n, listoflists):
 
 
 def extrude (cells, hlist):
-    """ To complute the multiple linear extrusion of a d-complex.
+    """ To compute the multiple linear extrusion of a d-complex.
     Map R^d -> R^(d+1), according to: Ferrucci & Paoluzzi, CAD 1991.
     'cells' is a simplicial complex, given as a list of lists;
     'hlist' is a list of heights in the added dimension.
@@ -233,49 +233,6 @@ def extrude (cells, hlist):
         cells.append(final_simplices)
     return cell_complex(cells)
 
-# def extrude (cells, hlist):
-# 	""" To complute the multiple linear extrusion of a d-complex.
-# 	Map R^d -> R^(d+1), according to: Ferrucci & Paoluzzi, CAD 1991.
-# 	'cells' is a simplicial complex, given as a list of lists;
-# 	'hlist' is a list of heights in the added dimension.
-# 
-# 	Return a (d+1)-dimensional simplicial complex.
-# 	Only the 0- and (d+1)- skeletons are computed.
-# 	In order to get the remaining skeletons, the 'SimplicialComplex' function
-# 	is used.
-# 	"""
-# 
-# 	dim = dimension(cells)
-# 	verts = cells[0]
-# 	myprint("hlist",hlist)
-# 	lastcoords = progressive_sum(AA(ABS)(hlist))
-# 	
-# 	if dim == 0:
-# 		cells = [[],[]]
-# 		vertices = AA(LIST)(lastcoords)
-# 		cells[1] = [[i,i+1] for i in range(1,len(hlist)+1)]
-# 	else:
-# 		simplexes = cells[dim]
-# 		nverts = len(verts)
-# 		nsteps = len(lastcoords)
-# 		sliced_vertices = nsteps*[verts]
-# 		def coords_distribute(x):
-# 			return COMP([ CAT, AA(COMP([ AA(AR), DISTR ])) ])(x)
-# 		vertices = coords_distribute(TRANS([nsteps*[verts],lastcoords]))
-# 
-# 		extruded_simplices = []
-# 		for cell in simplexes:
-# 			vertPtrs = cell + map(lambda x: x+nverts, cell)  
-# 			extruded_simplices += subcomplex(dim+2,vertPtrs)
-# 	
-# 		final_simplices = []
-# 		for i in range(nsteps-1):
-# 			if hlist[i] > 0:
-# 				simplex_layer = shift(nverts*i,extruded_simplices)
-# 				final_simplices += simplex_layer
-# 		cells.append(final_simplices)
-# 		
-# 	return cell_complex(cells)
 
 ## --------------------------------------------------
 ## --Format conversion-------------------------------

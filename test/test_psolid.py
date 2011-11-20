@@ -12,7 +12,7 @@ def psurf(point,r=0.5):
 Map(psurf, dom, PolytopalComplex).view()
 
 a = Map(psurf, dom, PolytopalComplex)
-draw(a.boundary())
+#draw(a.boundary())
 
 
 #draw(Map(psurf, dom, "PolytopalComplex"))

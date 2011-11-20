@@ -110,7 +110,7 @@ class SimplicialComplex(PolytopalComplex):
 			return linalg.det(mat(simplex(cell)))
 
 		def orientation():
-			if d == obj.rn:   # solid complex
+			if d == obj.rn:	  # solid complex
 				out = [volume(cell) for cell in cells[-1]]
 			else:				# embedded complex
 				out = [linalg.det(linalg.qr(mat(simplex(cell)))[1][:,:-1])
@@ -120,7 +120,7 @@ class SimplicialComplex(PolytopalComplex):
 		
 		boundary_indices = [i for i in range(A.shape[0]) if A[i].sum() == 1 ] 
 			
-		boundary_signs = orientation()   
+		boundary_signs = orientation()	 
 
 		boundary_pairs = [(i,j) for (i,j) in a 
 			if (j in boundary_indices)] 
@@ -135,9 +135,9 @@ class SimplicialComplex(PolytopalComplex):
 
 
 		facets = [eval(facetsdict[k]) for k in boundary_indices]
- 		facets = [invertOrientation(eval(facetsdict[facet]))  
- 					if boundary_signs[face]<0 else eval(facetsdict[facet])
- 					for face,facet in boundary_pairs]
+		facets = [invertOrientation(eval(facetsdict[facet]))  
+					if boundary_signs[face]<0 else eval(facetsdict[facet])
+					for face,facet in boundary_pairs]
 				
 		# remapping section -----------------------------------------------
 		
@@ -182,7 +182,7 @@ class SimplicialComplex(PolytopalComplex):
 
 			extruded_simplices = []
 			for cell in simplexes:
-				vertPtrs = cell + map(lambda x: x+nverts, cell)  
+				vertPtrs = cell + map(lambda x: x+nverts, cell)	 
 				extruded_simplices += subcomplex(dim+2,vertPtrs)
 		
 			final_simplices = []
@@ -682,8 +682,8 @@ def Map (mapping, pol, out=SimplicialComplex):
 		return linalg.det(mat(simplex(cell[:verts.dim+1])))
 
 	newcells = [cell for cell in newcells if (len(cell) == len(set(cell)))]
-# 	if verts.dim == pol.rn:  
-# 		newcells = [cell  for cell in newcells if volume(cell) != 0.0 ]
+#	if verts.dim == pol.rn:	 
+#		newcells = [cell  for cell in newcells if volume(cell) != 0.0 ]
 				
 	return out(newpoints, newcells)
 
@@ -710,26 +710,28 @@ def offset(point,expl=[1,1,1]):
 	vect = VECTDIFF([scaledpoint,point])
 	return vect
 	
+def spheres(color=0,colors=[CYAN,MAGENTA,YELLOW,WHITE]):
+	def spheres0(batches,points,expl=[1,1,1]):
+		sx = 0.05
+		points = CAT(points)
+		unitSphere = Batch.openObj("sphere18x27.obj")[0]
+		for point in points:
+			batchSphere = Batch(unitSphere)
+			vect = offset(point,expl)
+			if len(point) == 2:
+				point = point + [0.0]
+				vect = vect + [0.0]
+			batchSphere.matrix =  Mat4f.translate(*vect) * \
+				Mat4f.translate(*point)*Mat4f.scale(sx,sx,sx)
+			batchSphere.diffuse = colors[color]
+			batches += [batchSphere]
+		return batches
+	return spheres0
 
-def spheres(batches,points,expl=[1,1,1]):
-	sx = 0.05
-	points = CAT(points)
-	unitSphere = Batch.openObj("sphere18x27.obj")[0]
-	for point in points:
-		batchSphere = Batch(unitSphere)
-		vect = offset(point,expl)
-		if len(point) == 2:
-			point = point + [0.0]
-			vect = vect + [0.0]
-		batchSphere.matrix =  Mat4f.translate(*vect) * \
-			Mat4f.translate(*point)*Mat4f.scale(sx,sx,sx)
-		batchSphere.diffuse=CYAN
-		batches += [batchSphere]
-	return batches
-
-def transfCylr(batchCylinder,pointpair,expl=[1,1,1]):
+def transfCylr(batchCylinder,pointpair,expl=[1,1,1],color=1,colors=[CYAN,MAGENTA,YELLOW,WHITE]):
 	vect,point = VECTDIFF(REVERSE(pointpair)),pointpair[0]
 	sx = 0.025
+	colors = [CYAN,MAGENTA,YELLOW,WHITE]
 	
 	def vectTransform(vect):
 		qz = UNITVECT(vect)
@@ -753,50 +755,63 @@ def transfCylr(batchCylinder,pointpair,expl=[1,1,1]):
 	vect = offset(center,expl)
 	batchCylinder.matrix = Mat4f.translate(*vect) *\
 		Mat4f.translate(*point) * rot * Mat4f.scale(sx,sx,h)
-	batchCylinder.diffuse = MAGENTA
+	batchCylinder.diffuse = colors[color]
 	return batchCylinder
 
-def cylinders(batches,edgepoints,expl=[1,1,1]):
-	unitCylinder = Batch.openObj("cylinder4x27.obj")[0]		   
-	vects = [VECTDIFF(edge) for edge in edgepoints]
-	for pointpair in edgepoints:
-		batchCyl = Batch(unitCylinder)
-		batchCyl = transfCylr(batchCyl,pointpair,expl)
-		batches += [batchCyl]
-	return batches
+def cylinders(color=1,colors=[CYAN,MAGENTA,YELLOW,WHITE]):
+	def cylinders0(batches,edgepoints,expl=[1,1,1]):
+		unitCylinder = Batch.openObj("cylinder4x27.obj")[0]		   
+		vects = [VECTDIFF(edge) for edge in edgepoints]
+		for pointpair in edgepoints:
+			batchCyl = Batch(unitCylinder)
+			batchCyl = transfCylr(batchCyl,pointpair,expl,color,colors=[CYAN,MAGENTA,YELLOW,WHITE])
+			batches += [batchCyl]
+		return batches
+	return cylinders0
 
-def planecells(batches,facepoints,expl=[1,1,1]):
-	for points in facepoints:
-		n = len(points)
-		center = [coord/float(n) for coord in VECTSUM(points)]
-		vect = offset(center,expl)
-		points = [[point[k]+vect[k] for k in range(3)] for point in points]
-		def sign(points):
-			return SIGN(VECTPROD(AA(C(VECTDIFF)(center))(points[2:0:-1])))
-		face = MKPOL([points,[range(1,n+1)],None])
-		faceBatch = Plasm.getBatches(face)
-		faceBatch[0].diffuse = WHITE
-		batches += faceBatch
-	return batches
+def planecells(color=3,colors=[CYAN,MAGENTA,YELLOW,WHITE]):
+	def planecells0(batches,facepoints,expl=[1,1,1]):
+		colors = [CYAN,MAGENTA,YELLOW,WHITE]
+		for points in facepoints:
+			n = len(points)
+			center = [coord/float(n) for coord in VECTSUM(points)]
+			vect = offset(center,expl)
+			points = [[point[k]+vect[k] for k in range(3)] for point in points]
+			def sign(points):
+				return SIGN(VECTPROD(AA(C(VECTDIFF)(center))(points[2:0:-1])))
+			face = MKPOL([points,[range(1,n+1)],None])
+			faceBatch = Plasm.getBatches(face)
+			faceBatch[0].diffuse = colors[color]
+			batches += faceBatch
+		return batches
+	return planecells0
 
-def cells(batches,cellpoints,expl=[1,1,1]):
-	for points in cellpoints:
-		n = len(points)
-		center = [coord/float(n) for coord in VECTSUM(points)]
-		vect = offset(center,expl)
-		points = [[point[k]+vect[k] for k in range(3)] for point in points]
-		cell = MKPOL([points,[range(1,n+1)],None])
-		cellBatch = Plasm.getBatches(cell)
-		cellBatch[0].diffuse = YELLOW
-		batches += cellBatch
-		# view rotation
-		rot = ROTN([ ACOS(INNERPROD([ [1,1,1],[0,0,1] ])), VECTPROD([ [1,1,1],[0,0,1] ]) ])
-		batches += Plasm.getBatches(STRUCT([rot, MK([1,1,1])]))
-	return batches
+def cells(color=2,colors=[CYAN,MAGENTA,YELLOW,WHITE]):
+	def cells0(batches,cellpoints,expl=[1,1,1]):
+		colors = [CYAN,MAGENTA,YELLOW,WHITE]
+		for points in cellpoints:
+			n = len(points)
+			center = [coord/float(n) for coord in VECTSUM(points)]
+			vect = offset(center,expl)
+			points = [[point[k]+vect[k] for k in range(3)] for point in points]
+			cell = MKPOL([points,[range(1,n+1)],None])
+			cellBatch = Plasm.getBatches(cell)
+			cellBatch[0].diffuse = colors[color]
+			batches += cellBatch
+			# view rotation
+			rot = ROTN([ ACOS(INNERPROD([ [1,1,1],[0,0,1] ])), VECTPROD([ [1,1,1],[0,0,1] ]) ])
+			batches += Plasm.getBatches(STRUCT([rot, MK([1,1,1])]))
+		return batches
+	return cells0
 
 #/////////////////////////////////////////////////////////
 
-def draw (c,chains=4*[[]],expl=[1,1,1]):
+def draw (c,chains=4*[[]],expl=[1,1,1],color=-1,colors=[CYAN,MAGENTA,YELLOW,WHITE]):
+
+	if color == -1:  
+		color = range(len(colors))
+	else: 
+		color = [color] * len(colors)
 
 	if c.dim != -1:
 		embeddingDim = 3 - c.rn		# possible curation of embedding dimension
@@ -814,8 +829,12 @@ def draw (c,chains=4*[[]],expl=[1,1,1]):
 	
 		def addBatches(objType,batches,items,expl):
 			return objType(batches,items,expl)
+			
+		cols = len(colors)
+		myprint("cols",cols)
 	
-		primitives = [spheres, cylinders, planecells, cells]
+		primitives = [spheres(color[cols%3]), cylinders(color[cols%1]), 
+						planecells(color[cols%2]), cells(color[cols%3])]
 		batches = []
 		for k in range(c.dim + 1):
 			if chains[k] != []:
