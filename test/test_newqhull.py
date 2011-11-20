@@ -47,23 +47,58 @@ def reframe(points,cell):
     newCoords = affineCoords(simplex(points,cell))
     items = sorted([[CONS([grading,ID])(newCoords(point)),point]
                       for point in points],reverse=True)
-    dpoints = [(CONS([eval,ID])(grade),eval(affine),coords)
+    def regionKey(grade): return tuple(CONS((eval,ID))(grade))
+    def doubleCoords(affine,coords): return eval(affine),coords
+    dpoints = [(regionKey(grade),doubleCoords(affine,coords))
                for [grade,affine],coords in items]
-    return dpoints
+    regionDict = {}
+    for point in dpoints:
+        code,value = point
+        if regionDict.has_key(code): regionDict[code].append(value)
+        else: regionDict[code] = [value]
+    return regionDict
 
 
-
+def selectBasis(points):
+    myprint("points",points)
+    def inBasis(affinePoint):
+        myprint("affinePoint",affinePoint)
+        out = OR([True if coord==1.0 else False for coord in affinePoint])
+        myprint("out",out)
+        return out
+    return [point[1] for point in points if inBasis(point[0])]
 
 if __name__=="__main__":
 
     rpoints = randomPoints(d=3,n=40,scale=2)
     points = rpoints.points
     myprint("points",points)
-    draw(polyline(points),chains=[range(40)])    
+    #draw(polyline(points),chains=[range(40)])    
 
     cell = [rpoints.dict[code(p)] for p in greatSimplex(points)]
-    draw(SimplicialComplex(points,[cell]),colors=[RED,GREEN,BLUE])
+    c = SimplicialComplex(points,[cell])
+##    draw(c,chains=[[],range(len(c.cells[1]))],color=1)
+##    cell = [rpoints.dict[code(p)] for p in greatSimplex(points)]
+##    c = SimplicialComplex(points,[cell])
+##    draw(c,chains=[[],range(len(c.cells[1]))],color=2)
+##    draw(polyline(points),chains=[range(40)])    
 
-    dpoints = reframe(points,cell)
-    myprint("dpoints",dpoints)
+    regionDict = reframe(points,cell)
+    myprint("regionDict",regionDict)
+
+    thecolors=[CYAN,MAGENTA,WHITE,YELLOW,RED,
+			GREEN,BLUE,GRAY,BROWN,BLACK,ORANGE,PURPLE]
+    col=0
+    for region in regionDict:
+        myprint("region",region)
+        codeint,codebin = region
+        pointSubset = [point[1] for point in regionDict[region]]
+        if codeint == 15:
+            simplex = selectBasis(regionDict[region])
+            myprint("simplex",simplex)
+            out = SimplicialComplex(simplex,[range(len(simplex))])
+        else:
+            out = SimplicialComplex(pointSubset,AA(LIST)(range(len(pointSubset))))
+        draw(out,color=col%len(thecolors),colors=thecolors)
+        col += 1
 

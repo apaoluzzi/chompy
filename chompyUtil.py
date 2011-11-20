@@ -385,22 +385,23 @@ def homology_maps (dictos):
 
 	global homology
 	homology = [[],[]]
-	skeleton = dictos[1]
-	for cell in skeleton:
-		homology[1].extend([(skeleton[cell], facet[0], ) \
-		   for facet in facets(eval(cell))])
-	d = 1
-	for skeleton in dictos[2:]:
-		homology.append([])
-		d += 1
+	if len(dictos) > 1:
+		skeleton = dictos[1]
 		for cell in skeleton:
-			for facet in facets(eval(cell)):
-				try:
-					key = dictos[d-1][repr(facet)]
-					homology[d].extend([(skeleton[cell], key)])
-				except KeyError:
-					key = dictos[d-1][repr(revert(facet))]
-					homology[d].extend([(skeleton[cell], key)])
+			homology[1].extend([(skeleton[cell], facet[0], ) \
+			   for facet in facets(eval(cell))])
+		d = 1
+		for skeleton in dictos[2:]:
+			homology.append([])
+			d += 1
+			for cell in skeleton:
+				for facet in facets(eval(cell)):
+					try:
+						key = dictos[d-1][repr(facet)]
+						homology[d].extend([(skeleton[cell], key)])
+					except KeyError:
+						key = dictos[d-1][repr(revert(facet))]
+						homology[d].extend([(skeleton[cell], key)])
 	return homology
 
 

@@ -710,7 +710,7 @@ def offset(point,expl=[1,1,1]):
 	vect = VECTDIFF([scaledpoint,point])
 	return vect
 	
-def spheres(color=0,colors=[CYAN,MAGENTA,YELLOW,WHITE]):
+def spheres(color,colors):
 	def spheres0(batches,points,expl=[1,1,1]):
 		sx = 0.05
 		points = CAT(points)
@@ -731,7 +731,6 @@ def spheres(color=0,colors=[CYAN,MAGENTA,YELLOW,WHITE]):
 def transfCylr(batchCylinder,pointpair,expl=[1,1,1],color=1,colors=[CYAN,MAGENTA,YELLOW,WHITE]):
 	vect,point = VECTDIFF(REVERSE(pointpair)),pointpair[0]
 	sx = 0.025
-	colors = [CYAN,MAGENTA,YELLOW,WHITE]
 	
 	def vectTransform(vect):
 		qz = UNITVECT(vect)
@@ -758,20 +757,19 @@ def transfCylr(batchCylinder,pointpair,expl=[1,1,1],color=1,colors=[CYAN,MAGENTA
 	batchCylinder.diffuse = colors[color]
 	return batchCylinder
 
-def cylinders(color=1,colors=[CYAN,MAGENTA,YELLOW,WHITE]):
+def cylinders(color,colors):
 	def cylinders0(batches,edgepoints,expl=[1,1,1]):
 		unitCylinder = Batch.openObj("cylinder4x27.obj")[0]		   
 		vects = [VECTDIFF(edge) for edge in edgepoints]
 		for pointpair in edgepoints:
 			batchCyl = Batch(unitCylinder)
-			batchCyl = transfCylr(batchCyl,pointpair,expl,color,colors=[CYAN,MAGENTA,YELLOW,WHITE])
+			batchCyl = transfCylr(batchCyl,pointpair,expl,color,colors)
 			batches += [batchCyl]
 		return batches
 	return cylinders0
 
-def planecells(color=3,colors=[CYAN,MAGENTA,YELLOW,WHITE]):
+def planecells(color,colors):
 	def planecells0(batches,facepoints,expl=[1,1,1]):
-		colors = [CYAN,MAGENTA,YELLOW,WHITE]
 		for points in facepoints:
 			n = len(points)
 			center = [coord/float(n) for coord in VECTSUM(points)]
@@ -786,9 +784,8 @@ def planecells(color=3,colors=[CYAN,MAGENTA,YELLOW,WHITE]):
 		return batches
 	return planecells0
 
-def cells(color=2,colors=[CYAN,MAGENTA,YELLOW,WHITE]):
+def cells(color,colors):
 	def cells0(batches,cellpoints,expl=[1,1,1]):
-		colors = [CYAN,MAGENTA,YELLOW,WHITE]
 		for points in cellpoints:
 			n = len(points)
 			center = [coord/float(n) for coord in VECTSUM(points)]
@@ -806,7 +803,8 @@ def cells(color=2,colors=[CYAN,MAGENTA,YELLOW,WHITE]):
 
 #/////////////////////////////////////////////////////////
 
-def draw (c,chains=4*[[]],expl=[1,1,1],color=-1,colors=[CYAN,MAGENTA,YELLOW,WHITE]):
+def draw (c,chains=4*[[]],expl=[1,1,1],color=-1,colors=[CYAN,MAGENTA,WHITE,YELLOW,RED,
+			GREEN,BLUE,GRAY,BROWN,BLACK,ORANGE,PURPLE],batches = []):
 
 	if color == -1:  
 		color = range(len(colors))
@@ -830,12 +828,10 @@ def draw (c,chains=4*[[]],expl=[1,1,1],color=-1,colors=[CYAN,MAGENTA,YELLOW,WHIT
 		def addBatches(objType,batches,items,expl):
 			return objType(batches,items,expl)
 			
-		cols = len(colors)
-		myprint("cols",cols)
-	
-		primitives = [spheres(color[cols%3]), cylinders(color[cols%1]), 
-						planecells(color[cols%2]), cells(color[cols%3])]
-		batches = []
+		cols = len(colors)	
+		primitives = [spheres(color[0%cols],colors), cylinders(color[1%cols],colors), 
+						planecells(color[2%cols],colors), cells(color[3%cols],colors)]
+		
 		for k in range(c.dim + 1):
 			if chains[k] != []:
 				items = cellverts(c,chains[k])
@@ -844,6 +840,7 @@ def draw (c,chains=4*[[]],expl=[1,1,1],color=-1,colors=[CYAN,MAGENTA,YELLOW,WHIT
 		octree=Octree(batches)
 		viewer=Viewer(octree)
 		viewer.Run()
+		return batches
 	else: print "cannot draw an empty complex!"
 
 #/////////////////////////////////////////////////////////
