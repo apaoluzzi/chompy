@@ -34,7 +34,6 @@ class PointSet(list):  ## NEW
                             
         self.dict = {}
         k = -1
-        points = [ AA(float)(p) for p in points ]
         points = [eval(code(p)) for p in points]
         for i in range(len(points)):
             if code(points[i]) not in self.dict:

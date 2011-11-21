@@ -55,7 +55,7 @@ class PolytopalComplex(object):
 				return cell
 
 			homology = [[],[]]
-			if self.dim > 0:
+			if self.rn > 0:
 				skeleton = dictos[1]
 				for cell in skeleton:
 					homology[1].extend([(skeleton[cell], facet[0], ) \

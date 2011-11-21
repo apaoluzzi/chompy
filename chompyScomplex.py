@@ -829,13 +829,13 @@ def draw (c,chains=4*[[]],expl=[1,1,1],color=-1,colors=[CYAN,MAGENTA,WHITE,YELLO
 			return objType(batches,items,expl)
 			
 		cols = len(colors)	
-		primitives = [spheres(color[0%cols],colors), cylinders(color[1%cols],colors), 
+		primitive = [spheres(color[0%cols],colors), cylinders(color[1%cols],colors), 
 						planecells(color[2%cols],colors), cells(color[3%cols],colors)]
 		
 		for k in range(c.dim + 1):
 			if chains[k] != []:
 				items = cellverts(c,chains[k])
-				batches = addBatches(primitives[k],batches,items,expl)
+				batches = addBatches(primitive[k],batches,items,expl)
 	
 		octree=Octree(batches)
 		viewer=Viewer(octree)
