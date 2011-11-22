@@ -51,6 +51,9 @@ def simplex(verts,cell):
 
 
 
+
+
+
 def greatSimplex(points):
     """
     To extract a reference simplex from a list of 'points'.
@@ -58,13 +61,20 @@ def greatSimplex(points):
     Return a set of d+1 affinely independent points.
     """
     def randomSimplex(verts,d):
-        cell,m = [],2*d
+
+        def closetozero(number):
+            if abs(number)<1.0E-5:
+                return True
+            else:
+                return False
+
+        cell,m = [], len(verts)
         while len(cell) < d+1:
-            index = int(random.random()*m)
-            if index not in cell:
-                cell += [index]
+            print "eccomi"
+            index = int(random.random()*(m+1))
+            if index not in cell: cell += [index]
             if len(cell) == d+1 and \
-                linalg.det(mat(simplex(verts,cell))) < 1:
+                closetozero(linalg.det(mat(simplex(verts,cell)))):
                 cell = []
         return [verts[k] for k in cell]
     
@@ -74,6 +84,7 @@ def greatSimplex(points):
     return randomSimplex(extremes,d)
 
 
+
 def greatSimplex(points):
     """
     To extract a reference simplex from a list of 'points'.
@@ -81,24 +92,33 @@ def greatSimplex(points):
     Return a set of d+1 affinely independent points.
     """
     def randomSimplex(verts,d):
-        cell,m = [],2*d
+        
+        def closetozero(number):
+            if abs(number)<1.0E-5:
+                return True
+            else:
+                return False
+            
+        cell,m = [], len(verts)
         while len(cell) < d+1:
-            index = int(random.random()*m)
+            index = int(random.random()*(m))
             if index not in cell:
                 cell += [index]
             if len(cell) == d+1 and \
-                linalg.det(mat(simplex(verts,cell))) == 0:
+                closetozero(linalg.det(mat(simplex(verts,cell)))):
                 cell = []
         return [verts[k] for k in cell]
-    
+
     d = len(points[0])
     reference = randomSimplex(points,d)
     affine = affineCoords([point+[1.] for point in reference])
     points = [(affine(point),point) for point in points]
     out = [max(points,key=lambda x: eval(x[0])[k]) for k in range(d+1)]
-    return TRANS(out)[1]
-
-
+    out = TRANS(out)[1]
+    if len(out) == len(list(set(AA(code)(out)))): return out
+    else: return TRANS(points)[1][:d+1]
+    
+ 
 
 def reframe(points,cell):
     """
@@ -136,10 +156,10 @@ def selectBasis(points):
     def inBasis(affinePoint):
         return OR([True if coord==1.0 else False for coord in affinePoint])
     
-    return [point[1] for point in points if inBasis(point[0])]
+    return [point for point in points if inBasis(point[0])]
 
 
-def pointClassify(rpoints):
+def pointClassify(pointset):
     """
     To compute the classification of a PointSet w.r.t. to a maximal
     subset of affinely independent elements (greatSimplex).
@@ -148,10 +168,11 @@ def pointClassify(rpoints):
     Each tile has a binary key, and as value the subset of points
     contained within.
     """
-    points = rpoints.points
-    cell = [rpoints.dict[code(p)] for p in greatSimplex(points)]
-    regionDict = reframe(points,cell)
-    return regionDict
+    points = pointset.points
+    simplexPoints = greatSimplex(points)
+    cell = [pointset.dict[code(p)] for p in simplexPoints]
+    theRegionDict = reframe(points,cell)
+    return theRegionDict
 
 
 def drawRegions(regionDict):
@@ -183,32 +204,65 @@ def drawRegions(regionDict):
         col += 1
 
 
+def traverseDict(dictionary):
+    """
+    Scheme of DFS traversal of a (recursive) dictionary of dictionaries.
+    """
+    def elaborate (value):
+        pass
+    
+    for key in dictionary.keys():
+        if key == special:
+            # do something
+            pass
+        elif type(dictionary[key]) == dict:
+            traverseDict(dictionary[key])
+            # do elaborate value
+        elaborate(dictionary[key])
+    return None
+
+
+
+def makeRegionDict(pointSet,d):
+    regionDict = pointClassify(pointSet)
+    for key in regionDict.keys():
+        if len(regionDict[key]) > d+1:
+            if eval(key) == (2**(d+1) - 1):
+                regionDict[key] = selectBasis(regionDict[key])
+            else:
+                pointSubset = [point[1] for point in regionDict[key]]
+                regionDict[key] = makeRegionDict(PointSet(pointSubset),d)
+        else: pass
+    return regionDict
+
+
+
+def drawRegionDict(dictionary):
+    """
+    Scheme of DFS traversal of a (recursive) dictionary of dictionaries.
+    """
+    def elaborate (value):
+        points = TRANS(value)[1]
+        cells = [range(len(points))]
+        draw(SimplicialComplex(points,cells))
+    
+    for key in dictionary.keys():
+        if type(dictionary[key]) == dict:
+            drawRegionDict(dictionary[key])
+        else: elaborate(dictionary[key])
+    return None
 
 
 if __name__=="__main__":
 
-    rpoints = randomPoints(d=2,n=20,scale=3)
     rpoints = randomPoints(d=3,n=40,scale=2)
+    rpoints = randomPoints(d=2,n=40,scale=3)
+    d = rpoints.rn
     points = rpoints.points
-    d = len(points[0])
-    
-    regionDict = pointClassify(rpoints)
-    drawRegions(regionDict)
+    draw(polyline(points),chains=[range(len(polyline(points).cells[0]))])
+
+    regionDict = makeRegionDict(rpoints,d)
     myprint("regionDict",regionDict)
-    
-    for region in regionDict:
-        m = len(regionDict[region])
-        myprint("m",m)
-        myprint("region",region)
-        if m > d+1:
-            pointSubset = [point[1] for point in regionDict[region]]
-            myprint("pointSubset",pointSubset)
-            thecode = region
-            myprint("thecode",thecode)
-##            rpoints = PointSet(pointSubset)
-##            subRegionDict = pointClassify(rpoints)
-##            drawRegions(subRegionDict)
-##            regionDict[region] = subRegionDict
+    drawRegionDict(regionDict)
             
-    myprint("regionDict",regionDict)
     
