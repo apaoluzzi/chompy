@@ -579,6 +579,47 @@ class SimplicialComplex(PolytopalComplex):
 ##>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 		
 
+## -- translate function -------------------------------KO
+def translate(vect):
+	def translate0(pol):
+		""" To translate the SimplicialComplex by the vect.
+	
+		Return a new simplicial complex.
+		"""
+		out = copy.deepcopy(pol)
+		out.vertices.translate(vect)
+		return out
+	return translate0
+
+
+## -- scale function -------------------------------KO
+def scale(vect):
+	def scale0(pol):
+		""" To scale the SimplicialComplex by the vect.
+	
+		Return a new simplicial complex.
+		"""
+		out = copy.deepcopy(pol)
+		out.vertices.scale(vect)
+		return out
+	return scale0
+
+
+## -- rotate function -------------------------------KO
+def rotate (axis1, axis2, angle):
+	def rotate0 (pol):
+		""" To rotate the SimplicialComplex by the 'angle'.
+		The changed coords are 'axis1', 'axis2'
+	
+		Return a new simplicial complex.
+		"""
+		out = copy.deepcopy(pol)
+		out.vertices.rotate(axis1, axis2, angle)
+		return out
+	return rotate0
+
+
+
 def simplexGrid (listofquotes):
 	""" To generate a simplexGrid of d-simplices.
 
