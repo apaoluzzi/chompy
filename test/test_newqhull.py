@@ -137,11 +137,11 @@ def reframe(points,cell):
     dpoints = [(regionKey(grade),doubleCoords(affine,coords))
                for [grade,affine],coords in items]
     regionDict = {}
+    
     for point in dpoints:
         thecode,value = point
         if regionDict.has_key(thecode): regionDict[thecode].append(value)
         else: regionDict[thecode] = [value]
-    """ recursive contruction of dictionaries in crowded subregions"""
     return regionDict
 
 
@@ -224,6 +224,7 @@ def traverseDict(dictionary):
 
 
 def makeRegionDict(pointSet,d):
+    """ recursive contruction of dictionaries in crowded subregions"""
     regionDict = pointClassify(pointSet)
     for key in regionDict.keys():
         if len(regionDict[key]) > d+1:

@@ -6,4 +6,5 @@ from chompyCcomplex import *
 from chompyPcomplex import *
 from chompyDcomplex import *
 from chompyFenvs import *
+from chompyWingedRepr import *
 
