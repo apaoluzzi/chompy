@@ -3,7 +3,11 @@ from chompy import *
 
 def Boundary(obj,d=-1):
     """
+    Compute the boundary function 'c_d \mapsto \{ c_{d-1} \} for all the cells
+    in the d-skeleton.
 
+    Return an array of lists, indexed by the d-cells. The default is the last
+    value of d.
     """
     assert(type(obj) == SimplicialComplex or type(obj) == PolytopalComplex)
     out = [list() for k in range(len(obj.cells[d]))]
@@ -14,7 +18,12 @@ def Boundary(obj,d=-1):
 
 def Coboundary(obj,d=-2):
     """
+    Compute the coboundary function 'c_d \mapsto \{ c_{d+1} \} for all the cells
+    in the d-skeleton.
 
+    Return an array of lists, indexed by the d-cells. The default is the
+    penultimate value of d, so that the function returns subsets of the
+    last d-skeleton.
     """
     assert(type(obj) == SimplicialComplex or type(obj) == PolytopalComplex)
     out = [list() for k in range(len(obj.cells[d]))]
@@ -25,7 +34,9 @@ def Coboundary(obj,d=-2):
 
 def boundaryEdgeFace(obj):
     """
+    Compute the subset of incidence relation edge-face restricted to the boundary.
 
+    Return a list of lists, indexed by the edges.
     """
     assert(type(obj) == SimplicialComplex or type(obj) == PolytopalComplex)
     coboundary_2 = Coboundary(obj)
@@ -106,18 +117,6 @@ def boundaryWingedRepr(obj):
     return tuples
 
 
-
-if __name__=="__main__":
-    obj = simplexGrid([2*[1],2*[1],[1]])
-    obj = cuboid([1,1,1])
-    obj = cprod([intervals(2.0)(2), intervals(2.0)(2), intervals(2.0)(2)])
-    myprint("decWingedRepr(obj)",decWingedRepr(obj))
-    myprint("boundaryWingedRepr(obj)",boundaryWingedRepr(obj))
-    draw(obj,chains=[[1, 3, 4, 6, 18, 19, 20, 21], [],[6, 19, 21, 10, 32, 8], [0, -1, -1, 5, -1, 4]])
-
-
-
-
 def orientedBoundaryWingedRepr(obj):
     """
     Compute the **oriented** **boundary winged** representation of the
@@ -158,13 +157,55 @@ def orientedBoundaryWingedRepr(obj):
     return tuples
 
 
+def setUpChains(listOfLists,d):
+    """
+    To set up a single tuple of the winged representation of a complex
+    to be displayed by the 'draw' function.
+
+    Usage:
+
+    >>> obj = simplexGrid([2*[1],2*[1],[1]])
+    >>> objRepr = decWingedRepr(obj)
+    >>> for k in range(len(objRepr)):
+            draw(obj,chains=setUpChains(objRepr[k],3))
+
+    Return a list of k-chains, for k in range(d+1).
+    """
+    chains = (d+1)*[[]]
+    chains[0] = listOfLists[0]
+    for k in range(1,d-2): chains[k]=[]
+    chains[d-1] = listOfLists[1]
+    chains[d] = [el for el in listOfLists[2] if el != -1]
+    myprint("chains",chains)
+    return chains
+
 
 if __name__=="__main__":
-    obj = simplexGrid([[1],[1],[1]])
+    obj = simplexGrid([2*[1],2*[1],[1]])
+    obj = cuboid([1,1,1])
+    obj = cprod([intervals(2.0)(2), intervals(2.0)(2), intervals(2.0)(2)])
+    myprint("decWingedRepr(obj)",decWingedRepr(obj))
+    myprint("boundaryWingedRepr(obj)",boundaryWingedRepr(obj))
+
+
+if False:
     obj = cuboid([1,1,1])
     objRepr = orientedBoundaryWingedRepr(obj.boundary())
+    obj = simplexGrid([2*[1],2*[1],[1]]).boundary()
+    objRepr = orientedBoundaryWingedRepr(obj)
     myprint("objRepr",objRepr)
+
+if False:
+    def setUpChains(listOfLists,d):
+        chains = (d+1)*[[]]
+        chains[0] = listOfLists[0]
+        for k in range(1,d-2): chains[k]=[]
+        chains[d-1] = listOfLists[1]
+        chains[d] = [el for el in listOfLists[2] if el != -1]
+        myprint("chains",chains)
+        return chains
+    
     for k in range(len(objRepr)):
-        draw(obj.boundary(),chains=objRepr[k])
+        draw(obj,chains=setUpChains(objRepr[k],2))
         
 
